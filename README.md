@@ -19,6 +19,8 @@ A lightweight, zero-dependency canvas-based physics simulation library that turn
 
 Check out the [live demo](demo/index.html) to see it in action!
 
+For a quick start guide, see [GETTING_STARTED.md](GETTING_STARTED.md).
+
 ## 📦 Installation
 
 ```bash
