@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced Fixes Test - soft-paper-ui</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    
+    h1 {
+      color: white;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .info {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 40px;
+      max-width: 800px;
+    }
+    
+    .info h2 {
+      color: #667eea;
+      margin-bottom: 10px;
+    }
+    
+    .info ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    
+    .info li {
+      padding: 5px 0;
+    }
+    
+    .info li::before {
+      content: "✅ ";
+    }
+    
+    .test-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 40px;
+      max-width: 1400px;
+      width: 100%;
+    }
+    
+    /* Test Card 1: Complex Nested Structure */
+    .test-card-1 {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      border: 3px solid #667eea;
+    }
+    
+    .test-card-1 h3 {
+      color: #667eea;
+      margin-bottom: 15px;
+      font-size: 24px;
+    }
+    
+    .test-card-1 .content {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .test-card-1 img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+    
+    .test-card-1 p {
+      color: #555;
+      line-height: 1.6;
+    }
+    
+    .test-card-1 strong {
+      color: #764ba2;
+      font-weight: 600;
+    }
+    
+    .test-card-1 .badge {
+      display: inline-block;
+      background: #667eea;
+      color: white;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 12px;
+      margin-top: 10px;
+    }
+    
+    /* Test Card 2: Flexbox Layout */
+    .test-card-2 {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      border-radius: 15px;
+      padding: 25px;
+      color: white;
+    }
+    
+    .test-card-2 h3 {
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+    
+    .test-card-2 .flex-items {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    
+    .test-card-2 .flex-item {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 15px;
+      border-radius: 10px;
+      flex: 1;
+      min-width: 100px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .test-card-2 .flex-item h4 {
+      font-size: 28px;
+      margin-bottom: 5px;
+    }
+    
+    .test-card-2 .flex-item p {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    
+    /* Test Card 3: Grid Layout */
+    .test-card-3 {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    .test-card-3 h3 {
+      color: #333;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .test-card-3 .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+    
+    .test-card-3 .grid-item {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+    
+    .test-card-3 .grid-item .icon {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+    
+    .test-card-3 .grid-item h4 {
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+    
+    .test-card-3 .grid-item p {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+    
+    .controls {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 40px;
+      text-align: center;
+    }
+    
+    .controls button {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 5px;
+      transition: all 0.3s;
+    }
+    
+    .controls button:hover {
+      background: #764ba2;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    .status {
+      margin-top: 20px;
+      padding: 15px;
+      background: #e8f5e9;
+      border-radius: 8px;
+      color: #2e7d32;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎨 Advanced Fixes Verification Test</h1>
+  
+  <div class="info">
+    <h2>What's Being Tested:</h2>
+    <ul>
+      <li><strong>Triangle-based texture mapping</strong> - Proper cloth warping</li>
+      <li><strong>Full DOM capture</strong> - Complex nested elements</li>
+      <li><strong>CSS preservation</strong> - Gradients, flexbox, grid, borders</li>
+      <li><strong>Tear resistance</strong> - Elements don't break on drag</li>
+      <li><strong>Async initialization</strong> - Smooth loading</li>
+    </ul>
+    <p style="margin-top: 15px;">
+      <strong>Instructions:</strong> Click and drag any card. Watch how the texture warps smoothly with physics.
+      Notice that all CSS styles are preserved during simulation.
+    </p>
+  </div>
+  
+  <div class="test-container">
+    <!-- Test 1: Complex Nested Structure -->
+    <div class="test-card-1" id="test1">
+      <h3>🏆 Complex Nested</h3>
+      <div class="content">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Ccircle cx='30' cy='30' r='28' fill='%23667eea'/%3E%3C/svg%3E" alt="Avatar">
+        <div>
+          <p>This card has <strong>nested elements</strong> with various CSS properties.</p>
+          <span class="badge">Advanced DOM</span>
+        </div>
+      </div>
+      <p>The texture should warp smoothly following the physics simulation while preserving all visual elements.</p>
+    </div>
+    
+    <!-- Test 2: Flexbox Layout -->
+    <div class="test-card-2" id="test2">
+      <h3>📊 Flexbox Layout</h3>
+      <div class="flex-items">
+        <div class="flex-item">
+          <h4>98%</h4>
+          <p>Accuracy</p>
+        </div>
+        <div class="flex-item">
+          <h4>60</h4>
+          <p>FPS</p>
+        </div>
+        <div class="flex-item">
+          <h4>10x</h4>
+          <p>Stronger</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Test 3: Grid Layout -->
+    <div class="test-card-3" id="test3">
+      <h3>🎯 Grid Layout</h3>
+      <div class="grid">
+        <div class="grid-item">
+          <div class="icon">🚀</div>
+          <h4>Fast</h4>
+          <p>60 FPS</p>
+        </div>
+        <div class="grid-item">
+          <div class="icon">✨</div>
+          <h4>Beautiful</h4>
+          <p>Full CSS</p>
+        </div>
+        <div class="grid-item">
+          <div class="icon">💪</div>
+          <h4>Strong</h4>
+          <p>No tears</p>
+        </div>
+        <div class="grid-item">
+          <div class="icon">🎨</div>
+          <h4>Smooth</h4>
+          <p>Warping</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="controls">
+    <h3>Test Controls</h3>
+    <button onclick="toggleWind()">Toggle Wind</button>
+    <button onclick="repairAll()">Repair Tears</button>
+    <button onclick="togglePhysics()">Pause/Resume</button>
+    <div class="status" id="status">
+      ✅ All systems operational - Drag cards to test physics!
+    </div>
+  </div>
+  
+  <script type="module">
+    import { SoftPaper } from '../dist/esm/index.js';
+    
+    const papers = [];
+    let windEnabled = false;
+    
+    // Initialize with advanced configuration
+    const config = {
+      grid: { cols: 12, rows: 24 },
+      gravity: 0.15,
+      stiffness: 0.9,
+      damping: 0.94,
+      airResistance: 0.996,
+      friction: 0.98,
+      iterations: 6,
+      tearThreshold: 10.0, // High resistance
+      interactive: true,
+      shadow: true,
+      wind: false,
+      windStrength: 0.08,
+      hoverEffect: true,
+      boundaries: true
+    };
+    
+    // Initialize all test cards
+    ['test1', 'test2', 'test3'].forEach(id => {
+      try {
+        const paper = new SoftPaper(`#${id}`, config);
+        papers.push(paper);
+        console.log(`✅ Initialized #${id}`);
+      } catch (error) {
+        console.error(`❌ Failed to initialize #${id}:`, error);
+        updateStatus(`Error initializing ${id}`, 'error');
+      }
+    });
+    
+    // Global controls
+    window.toggleWind = function() {
+      windEnabled = !windEnabled;
+      papers.forEach(p => p.setWind(windEnabled));
+      updateStatus(`Wind ${windEnabled ? 'enabled' : 'disabled'}`, 'success');
+    };
+    
+    window.repairAll = function() {
+      let totalRepaired = 0;
+      papers.forEach(p => {
+        totalRepaired += p.getTornCount();
+        p.repairTears();
+      });
+      updateStatus(`Repaired ${totalRepaired} tears`, 'success');
+    };
+    
+    window.togglePhysics = function() {
+      papers.forEach(p => {
+        if (p.animationFrame) {
+          p.stop();
+        } else {
+          p.start();
+        }
+      });
+      updateStatus('Physics toggled', 'info');
+    };
+    
+    function updateStatus(message, type = 'success') {
+      const status = document.getElementById('status');
+      const icons = {
+        success: '✅',
+        error: '❌',
+        info: 'ℹ️'
+      };
+      status.textContent = `${icons[type]} ${message}`;
+      status.style.background = type === 'error' ? '#ffebee' : 
+                                type === 'info' ? '#e3f2fd' : '#e8f5e9';
+      status.style.color = type === 'error' ? '#c62828' : 
+                           type === 'info' ? '#1565c0' : '#2e7d32';
+    }
+    
+    // FPS monitoring
+    let lastTime = performance.now();
+    let frames = 0;
+    
+    function monitorFPS() {
+      frames++;
+      const now = performance.now();
+      if (now >= lastTime + 1000) {
+        const fps = Math.round((frames * 1000) / (now - lastTime));
+        if (fps < 30) {
+          updateStatus(`⚠️ Low FPS: ${fps}`, 'error');
+        }
+        frames = 0;
+        lastTime = now;
+      }
+      requestAnimationFrame(monitorFPS);
+    }
+    
+    monitorFPS();
+    
+    // Initial status
+    setTimeout(() => {
+      const tornCount = papers.reduce((sum, p) => sum + p.getTornCount(), 0);
+      updateStatus(`${papers.length} papers active, ${tornCount} tears`, 'success');
+    }, 1000);
+  </script>
+</body>
+</html>

@@ -7,6 +7,7 @@ export { SoftPaper } from './SoftPaper.js';
 export { Vec2 } from './Vec2.js';
 export { Particle } from './Particle.js';
 export { Constraint } from './Constraint.js';
+export { drawTexturedQuad, drawTexturedTriangle } from './TextureMapper.js';
 export type {
   Point,
   GridConfig,
@@ -14,3 +15,4 @@ export type {
   SoftPaperOptions,
   ParticleState
 } from './types.js';
+

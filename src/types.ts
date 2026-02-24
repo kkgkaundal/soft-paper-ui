@@ -26,6 +26,9 @@ export interface PhysicsConfig {
   stiffness: number;
   damping: number;
   iterations: number;
+  airResistance: number;
+  friction: number;
+  tearThreshold: number;
 }
 
 /**
@@ -37,13 +40,20 @@ export interface SoftPaperOptions {
   stiffness?: number;
   damping?: number;
   iterations?: number;
+  airResistance?: number;
+  friction?: number;
+  tearThreshold?: number;
   interactive?: boolean;
   shadow?: boolean;
   wind?: boolean;
   windStrength?: number;
   windFrequency?: number;
   dragRadius?: number;
+  grabRadius?: number;  // Radius for multi-particle cloth grab
   canvasScale?: number;
+  boundaries?: boolean;
+  hoverEffect?: boolean;
+  hoverRadius?: number;
 }
 
 /**

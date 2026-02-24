@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Debug Texture Capture - soft-paper-ui</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background: #f0f0f0;
+    }
+    
+    .debug-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      color: #333;
+    }
+    
+    .test-element {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      border-radius: 15px;
+      border: 3px solid white;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      width: 300px;
+      margin: 20px 0;
+    }
+    
+    .test-element h2 {
+      margin: 0 0 15px 0;
+      font-size: 24px;
+    }
+    
+    .test-element p {
+      margin: 0;
+      line-height: 1.6;
+    }
+    
+    .debug-output {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+    
+    .debug-output h3 {
+      margin-top: 0;
+      color: #667eea;
+    }
+    
+    .canvas-preview {
+      border: 2px solid #ddd;
+      margin: 10px 0;
+      background: #fff;
+    }
+    
+    .log {
+      background: #f5f5f5;
+      padding: 15px;
+      border-radius: 5px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      max-height: 400px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+    
+    .log-entry {
+      padding: 2px 0;
+    }
+    
+    .log-entry.success { color: #2e7d32; }
+    .log-entry.error { color: #c62828; }
+    .log-entry.warn { color: #f57c00; }
+    .log-entry.info { color: #1565c0; }
+    
+    button {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 5px;
+      font-size: 14px;
+    }
+    
+    button:hover {
+      background: #764ba2;
+    }
+  </style>
+</head>
+<body>
+  <div class="debug-container">
+    <h1>🔍 Texture Capture Debug Tool</h1>
+    <p>This page helps debug element texture capture issues.</p>
+    
+    <div class="test-element" id="testElement">
+      <h2>Test Element</h2>
+      <p>This element should be captured and rendered on the physics canvas.</p>
+      <p><strong>Check below</strong> to see the captured texture.</p>
+    </div>
+    
+    <div class="debug-output">
+      <h3>Captured Texture Preview</h3>
+      <p>This is what the physics simulation sees:</p>
+      <canvas id="texturePreview" class="canvas-preview"></canvas>
+      <br>
+      <button onclick="downloadTexture()">Download Texture</button>
+      <button onclick="inspectTexture()">Inspect Texture Data</button>
+    </div>
+    
+    <div class="debug-output">
+      <h3>Physics Simulation</h3>
+      <p>The element with physics applied (should show the captured texture):</p>
+      <div id="physicsContainer"></div>
+    </div>
+    
+    <div class="debug-output">
+      <h3>Debug Log</h3>
+      <div class="log" id="debugLog"></div>
+      <button onclick="clearLog()">Clear Log</button>
+    </div>
+  </div>
+  
+  <script type="module">
+    import { SoftPaper } from '../dist/esm/index.js';
+    
+    const logs = [];
+    
+    // Intercept console methods
+    const originalLog = console.log;
+    const originalWarn = console.warn;
+    const originalError = console.error;
+    
+    function addLog(message, type = 'info') {
+      const timestamp = new Date().toLocaleTimeString();
+      const entry = `[${timestamp}] ${message}`;
+      logs.push({ message: entry, type });
+      updateLog();
+    }
+    
+    function updateLog() {
+      const logEl = document.getElementById('debugLog');
+      logEl.innerHTML = logs.map(log => 
+        `<div class="log-entry ${log.type}">${log.message}</div>`
+      ).join('');
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+    
+    console.log = function(...args) {
+      originalLog.apply(console, args);
+      addLog(args.join(' '), 'info');
+    };
+    
+    console.warn = function(...args) {
+      originalWarn.apply(console, args);
+      addLog(args.join(' '), 'warn');
+    };
+    
+    console.error = function(...args) {
+      originalError.apply(console, args);
+      addLog(args.join(' '), 'error');
+    };
+    
+    // Initialize
+    addLog('Starting initialization...', 'info');
+    
+    let paper;
+    
+    try {
+      paper = new SoftPaper('#testElement', {
+        grid: { cols: 10, rows: 20 },
+        gravity: 0.15,
+        stiffness: 0.9,
+        tearThreshold: 10.0,
+        interactive: true,
+        shadow: true
+      });
+      
+      addLog('✅ SoftPaper instance created', 'success');
+      
+      // Wait for initialization
+      setTimeout(() => {
+        try {
+          // Display captured texture
+          const texture = paper.getTexture();
+          const preview = document.getElementById('texturePreview');
+          preview.width = texture.width;
+          preview.height = texture.height;
+          
+          const previewCtx = preview.getContext('2d');
+          previewCtx.drawImage(texture, 0, 0);
+          
+          addLog(`✅ Texture displayed: ${texture.width}x${texture.height}px`, 'success');
+          
+          // Check if texture has content (may fail if canvas is tainted)
+          try {
+            const imageData = previewCtx.getImageData(0, 0, texture.width, texture.height);
+            let pixelCount = 0;
+            let nonTransparentPixels = 0;
+            
+            for (let i = 0; i < imageData.data.length; i += 4) {
+              pixelCount++;
+              if (imageData.data[i + 3] > 0) {
+                nonTransparentPixels++;
+              }
+            }
+            
+            const percentVisible = (nonTransparentPixels / pixelCount * 100).toFixed(2);
+            addLog(`Texture analysis: ${nonTransparentPixels}/${pixelCount} pixels visible (${percentVisible}%)`, 
+              nonTransparentPixels > 0 ? 'success' : 'error');
+            
+            if (nonTransparentPixels === 0) {
+              addLog('⚠️ WARNING: Texture appears to be completely transparent!', 'error');
+              addLog('This means the element was not captured correctly.', 'error');
+              addLog('Check browser console for capture errors.', 'warn');
+            }
+          } catch (securityError) {
+            if (securityError.name === 'SecurityError') {
+              addLog('ℹ️ Canvas is tainted (cross-origin security)', 'info');
+              addLog('✅ This is NORMAL and does NOT affect functionality', 'success');
+              addLog('✅ Texture can still be used for physics rendering', 'success');
+            } else {
+              throw securityError;
+            }
+          }
+        } catch (e) {
+          addLog(`❌ Error displaying texture: ${e.message}`, 'error');
+        }
+      }, 2000);
+      
+    } catch (error) {
+      addLog(`❌ Failed to create SoftPaper: ${error.message}`, 'error');
+      console.error('Initialization error:', error);
+    }
+    
+    // Global functions
+    window.downloadTexture = function() {
+      if (paper) {
+        try {
+          const dataURL = paper.getTextureDataURL();
+          const link = document.createElement('a');
+          link.download = 'texture-capture.png';
+          link.href = dataURL;
+          link.click();
+          addLog('✅ Texture downloaded', 'success');
+        } catch (e) {
+          addLog(`❌ Cannot download: ${e.message}`, 'error');
+          addLog('ℹ️ Canvas is tainted (cross-origin security restriction)', 'info');
+        }
+      }
+    };
+    
+    window.inspectTexture = function() {
+      if (paper) {
+        try {
+          const texture = paper.getTexture();
+          const ctx = texture.getContext('2d');
+          const imageData = ctx.getImageData(0, 0, texture.width, texture.height);
+          
+          // Sample some pixels
+          const samples = [];
+          for (let i = 0; i < 5; i++) {
+            const x = Math.floor(texture.width / 6 * (i + 1));
+            const y = Math.floor(texture.height / 2);
+            const index = (y * texture.width + x) * 4;
+            samples.push({
+              x, y,
+              r: imageData.data[index],
+              g: imageData.data[index + 1],
+              b: imageData.data[index + 2],
+              a: imageData.data[index + 3]
+            });
+          }
+          
+          addLog('--- Texture Pixel Samples ---', 'info');
+          samples.forEach((s, i) => {
+            addLog(`Sample ${i + 1} (${s.x},${s.y}): rgba(${s.r},${s.g},${s.b},${s.a})`, 'info');
+          });
+        } catch (e) {
+          if (e.name === 'SecurityError') {
+            addLog('❌ Cannot inspect pixels: Canvas is tainted (cross-origin)', 'error');
+            addLog('ℹ️ This happens when using SVG foreignObject capture', 'info');
+            addLog('✅ Texture still works for rendering!', 'success');
+          } else {
+            addLog(`❌ Error inspecting texture: ${e.message}`, 'error');
+          }
+        }
+      }
+    };
+    
+    window.clearLog = function() {
+      logs.length = 0;
+      updateLog();
+    };
+  </script>
+</body>
+</html>

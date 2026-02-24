@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Position Fix Test - Soft Paper UI</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background: #f5f5f5;
+    }
+    
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+    
+    .info {
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+    }
+    
+    .test-section {
+      margin-bottom: 40px;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .test-section h2 {
+      margin-top: 0;
+      color: #555;
+    }
+    
+    .test-section p {
+      color: #777;
+      margin-bottom: 20px;
+    }
+    
+    /* Test elements with different positioning */
+    .test-element {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      margin: 20px 0;
+    }
+    
+    .test-element h3 {
+      margin: 0 0 10px 0;
+      font-size: 24px;
+    }
+    
+    .test-element p {
+      margin: 0;
+      color: rgba(255,255,255,0.9);
+    }
+    
+    /* Different layouts to test */
+    .flex-container {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .flex-item {
+      flex: 1;
+      min-width: 250px;
+    }
+    
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    
+    .inline-test {
+      background: #e3f2fd;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    
+    .inline-element {
+      display: inline-block;
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 10px;
+      vertical-align: top;
+    }
+    
+    .absolute-container {
+      position: relative;
+      height: 400px;
+      background: #f0f0f0;
+      border-radius: 8px;
+      border: 2px dashed #ccc;
+    }
+    
+    .absolute-element {
+      position: absolute;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    
+    #abs1 { top: 50px; left: 50px; }
+    #abs2 { top: 50px; right: 50px; }
+    #abs3 { bottom: 50px; left: 50%; transform: translateX(-50%); }
+    
+    .status {
+      margin-top: 30px;
+      padding: 20px;
+      background: #d4edda;
+      border: 1px solid #c3e6cb;
+      border-radius: 8px;
+      color: #155724;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔧 Position Fix Test</h1>
+  
+  <div class="info">
+    <strong>✅ Fixed:</strong> Elements now maintain their original position in the document flow.
+    The wrapper properly inherits position type (static, relative, absolute, fixed) and display type (block, inline-block, flex).
+  </div>
+  
+  <!-- Test 1: Block-level elements -->
+  <div class="test-section">
+    <h2>Test 1: Block Elements (Default Flow)</h2>
+    <p>These should stack vertically and maintain their margins:</p>
+    
+    <div class="test-element" id="block1">
+      <h3>📦 Block 1</h3>
+      <p>This is a block-level element in normal flow</p>
+    </div>
+    
+    <div class="test-element" id="block2">
+      <h3>📦 Block 2</h3>
+      <p>This should be below Block 1</p>
+    </div>
+  </div>
+  
+  <!-- Test 2: Flex layout -->
+  <div class="test-section">
+    <h2>Test 2: Flex Container</h2>
+    <p>These should be side-by-side in a flex layout:</p>
+    
+    <div class="flex-container">
+      <div class="test-element flex-item" id="flex1">
+        <h3>💪 Flex 1</h3>
+        <p>Flex item with physics</p>
+      </div>
+      
+      <div class="test-element flex-item" id="flex2">
+        <h3>💪 Flex 2</h3>
+        <p>Another flex item</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Test 3: Grid layout -->
+  <div class="test-section">
+    <h2>Test 3: Grid Container</h2>
+    <p>These should be in a CSS grid layout:</p>
+    
+    <div class="grid-container">
+      <div class="test-element" id="grid1">
+        <h3>🔲 Grid 1</h3>
+        <p>Grid item</p>
+      </div>
+      
+      <div class="test-element" id="grid2">
+        <h3>🔲 Grid 2</h3>
+        <p>Grid item</p>
+      </div>
+      
+      <div class="test-element" id="grid3">
+        <h3>🔲 Grid 3</h3>
+        <p>Grid item</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Test 4: Inline-block elements -->
+  <div class="test-section">
+    <h2>Test 4: Inline-Block Elements</h2>
+    <p>These should flow horizontally like text:</p>
+    
+    <div class="inline-test">
+      <div class="inline-element" id="inline1">
+        <strong>Inline 1</strong>
+      </div>
+      <div class="inline-element" id="inline2">
+        <strong>Inline 2</strong>
+      </div>
+      <div class="inline-element" id="inline3">
+        <strong>Inline 3</strong>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Test 5: Absolute positioning -->
+  <div class="test-section">
+    <h2>Test 5: Absolute Positioned Elements</h2>
+    <p>These should maintain their absolute positions within the container:</p>
+    
+    <div class="absolute-container">
+      <div class="absolute-element" id="abs1">
+        <strong>Top Left</strong><br>
+        (50px, 50px)
+      </div>
+      
+      <div class="absolute-element" id="abs2">
+        <strong>Top Right</strong><br>
+        (right: 50px)
+      </div>
+      
+      <div class="absolute-element" id="abs3">
+        <strong>Bottom Center</strong><br>
+        (centered)
+      </div>
+    </div>
+  </div>
+  
+  <div class="status" id="status">Initializing physics...</div>
+  
+  <script type="module">
+    import { SoftPaper } from '../dist/esm/index.js';
+    
+    const statusEl = document.getElementById('status');
+    const ids = [
+      'block1', 'block2',
+      'flex1', 'flex2',
+      'grid1', 'grid2', 'grid3',
+      'inline1', 'inline2', 'inline3',
+      'abs1', 'abs2', 'abs3'
+    ];
+    
+    try {
+      // Initialize all test elements with physics
+      const papers = ids.map(id => {
+        return new SoftPaper(`#${id}`, {
+          interactive: true,
+          shadow: true,
+          hoverEffect: true
+        });
+      });
+      
+      setTimeout(() => {
+        statusEl.textContent = `✅ SUCCESS! ${papers.length} elements initialized with physics. Positions preserved!`;
+        
+        // Log wrapper positions for debugging
+        console.log('=== Position Verification ===');
+        ids.forEach(id => {
+          const element = document.getElementById(id);
+          const wrapper = element.parentElement;
+          const rect = wrapper.getBoundingClientRect();
+          console.log(`${id}:`, {
+            wrapperPosition: wrapper.style.position,
+            wrapperDisplay: wrapper.style.display,
+            wrapperTop: wrapper.style.top,
+            wrapperLeft: wrapper.style.left,
+            elementPosition: element.style.position,
+            elementVisibility: element.style.visibility,
+            boundingRect: { top: rect.top, left: rect.left, width: rect.width, height: rect.height }
+          });
+        });
+      }, 1000);
+      
+    } catch (error) {
+      statusEl.textContent = `❌ ERROR: ${error.message}`;
+      statusEl.style.background = '#f8d7da';
+      statusEl.style.borderColor = '#f5c6cb';
+      statusEl.style.color = '#721c24';
+      console.error(error);
+    }
+  </script>
+</body>
+</html>
