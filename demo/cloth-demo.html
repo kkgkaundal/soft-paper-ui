@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ultra-Smooth Cloth Physics - Soft Paper UI</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      color: white;
+      text-align: center;
+      font-size: 3rem;
+      margin-bottom: 10px;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+
+    .subtitle {
+      color: rgba(255,255,255,0.9);
+      text-align: center;
+      font-size: 1.3rem;
+      margin-bottom: 40px;
+    }
+
+    .card {
+      background: white;
+      padding: 50px;
+      border-radius: 24px;
+      box-shadow: 0 25px 80px rgba(0,0,0,0.35);
+      margin: 30px auto;
+      max-width: 600px;
+    }
+
+    .card h2 {
+      color: #333;
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+    }
+
+    .card p {
+      color: #666;
+      font-size: 1.2rem;
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .feature-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      margin: 5px;
+    }
+
+    .gradient-card {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+    }
+
+    .gradient-card h2,
+    .gradient-card p {
+      color: white;
+    }
+
+    .controls {
+      background: rgba(255,255,255,0.95);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+      margin: 40px auto;
+      max-width: 800px;
+    }
+
+    .controls h3 {
+      color: #333;
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+    }
+
+    .button-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      padding: 15px 25px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, #f093fb, #f5576c);
+      color: white;
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #11998e, #38ef7d);
+      color: white;
+    }
+
+    .btn-info {
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
+      color: white;
+    }
+
+    .info-box {
+      background: #e3f2fd;
+      border-left: 4px solid #2196f3;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+
+    .info-box h4 {
+      color: #1976d2;
+      margin-bottom: 10px;
+    }
+
+    .info-box ul {
+      color: #555;
+      line-height: 2;
+      padding-left: 20px;
+    }
+
+    .status {
+      text-align: center;
+      padding: 20px;
+      background: #d4edda;
+      border-radius: 12px;
+      color: #155724;
+      font-weight: bold;
+      margin-top: 30px;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎨 Ultra-Smooth Cloth Physics</h1>
+    <p class="subtitle">Experience silk-soft dragging with advanced revert & effects</p>
+
+    <div class="card" id="card1">
+      <h2>✨ Drag Me!</h2>
+      <p>This card has ultra-smooth cloth-like physics. Try dragging it and watch how it flows like silk!</p>
+      <span class="feature-badge">⚡ 10 Iterations</span>
+      <span class="feature-badge">🌊 0.999 Air Resistance</span>
+      <span class="feature-badge">💎 0.98 Damping</span>
+    </div>
+
+    <div class="card gradient-card" id="card2">
+      <h2>🚀 Interactive Magic</h2>
+      <p>Move your mouse near this card without clicking - feel the gentle ripple effect. Then drag it to experience the softest physics ever!</p>
+      <span class="feature-badge">🎯 150px Hover Radius</span>
+      <span class="feature-badge">✨ Cubic Falloff</span>
+    </div>
+
+    <div class="controls">
+      <h3>🎮 Interactive Controls</h3>
+      
+      <div class="info-box">
+        <h4>✨ New Features:</h4>
+        <ul>
+          <li><strong>Revert:</strong> Smoothly returns to original position with animations</li>
+          <li><strong>Ripple:</strong> Creates wave effects from a point</li>
+          <li><strong>Wave:</strong> Animated wave motion across the cloth</li>
+          <li><strong>Shake:</strong> Earthquake-like vibration effect</li>
+        </ul>
+      </div>
+
+      <div class="button-group">
+        <button class="btn btn-primary" id="revertBtn">
+          🔄 Revert to Original
+        </button>
+        <button class="btn btn-secondary" id="revertBounceBtn">
+          🎾 Revert (Bounce)
+        </button>
+        <button class="btn btn-success" id="revertElasticBtn">
+          🎸 Revert (Elastic)
+        </button>
+        <button class="btn btn-info" id="rippleBtn">
+          💧 Center Ripple
+        </button>
+      </div>
+
+      <div class="button-group">
+        <button class="btn btn-primary" id="waveHorizontalBtn">
+          🌊 Horizontal Wave
+        </button>
+        <button class="btn btn-secondary" id="waveVerticalBtn">
+          🌊 Vertical Wave
+        </button>
+        <button class="btn btn-success" id="waveDiagonalBtn">
+          🌊 Diagonal Wave
+        </button>
+        <button class="btn btn-info" id="shakeBtn">
+          📳 Shake Effect
+        </button>
+      </div>
+
+      <div class="info-box">
+        <h4>🎯 Physics Improvements:</h4>
+        <ul>
+          <li><strong>Drag Force:</strong> Reduced to 0.15 (was 0.25) - 40% softer!</li>
+          <li><strong>Hover Effect:</strong> Now uses cubic falloff for silk-like smoothness</li>
+          <li><strong>Gravity:</strong> Reduced to 0.08 (was 0.12) - more floaty</li>
+          <li><strong>Stiffness:</strong> Reduced to 0.65 (was 0.75) - more flexible</li>
+          <li><strong>Damping:</strong> Increased to 0.98 (was 0.96) - smoother movement</li>
+          <li><strong>Iterations:</strong> Increased to 10 (was 8) - more accurate</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="status" id="status">Initializing ultra-smooth physics...</div>
+  </div>
+
+  <script type="module">
+    import { SoftPaper } from '../dist/esm/index.js';
+    
+    const statusEl = document.getElementById('status');
+    let papers = [];
+
+    try {
+      // Initialize cards with ultra-smooth cloth physics
+      const paper1 = new SoftPaper('#card1', {
+        interactive: true,
+        shadow: true,
+        hoverEffect: true
+      });
+
+      const paper2 = new SoftPaper('#card2', {
+        interactive: true,
+        shadow: true,
+        hoverEffect: true
+      });
+
+      papers = [paper1, paper2];
+
+      // Button event listeners
+      document.getElementById('revertBtn').addEventListener('click', () => {
+        papers.forEach(p => p.revertToOriginal(2000, 'smooth'));
+        statusEl.textContent = '🔄 Reverting to original position with smooth animation...';
+      });
+
+      document.getElementById('revertBounceBtn').addEventListener('click', () => {
+        papers.forEach(p => p.revertToOriginal(2000, 'bounce'));
+        statusEl.textContent = '🎾 Reverting with bounce effect...';
+      });
+
+      document.getElementById('revertElasticBtn').addEventListener('click', () => {
+        papers.forEach(p => p.revertToOriginal(2500, 'elastic'));
+        statusEl.textContent = '🎸 Reverting with elastic effect...';
+      });
+
+      document.getElementById('rippleBtn').addEventListener('click', () => {
+        papers.forEach(p => {
+          const canvas = p.getCanvas();
+          const rect = canvas.getBoundingClientRect();
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          p.createRipple(centerX, centerY, 8, 200);
+        });
+        statusEl.textContent = '💧 Creating ripple effect from center...';
+      });
+
+      document.getElementById('waveHorizontalBtn').addEventListener('click', () => {
+        papers.forEach(p => p.createWave('horizontal', 10, 0.6));
+        statusEl.textContent = '🌊 Creating horizontal wave...';
+      });
+
+      document.getElementById('waveVerticalBtn').addEventListener('click', () => {
+        papers.forEach(p => p.createWave('vertical', 10, 0.6));
+        statusEl.textContent = '🌊 Creating vertical wave...';
+      });
+
+      document.getElementById('waveDiagonalBtn').addEventListener('click', () => {
+        papers.forEach(p => p.createWave(Math.PI / 4, 10, 0.6));
+        statusEl.textContent = '🌊 Creating diagonal wave...';
+      });
+
+      document.getElementById('shakeBtn').addEventListener('click', () => {
+        papers.forEach(p => p.shake(5, 600));
+        statusEl.textContent = '📳 Shaking the cloth...';
+      });
+
+      // Auto-ripple effect on card click
+      document.getElementById('card1').addEventListener('click', (e) => {
+        if (e.target.tagName !== 'BUTTON') {
+          const rect = e.currentTarget.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          papers[0].createRipple(x, y, 6, 150);
+        }
+      });
+
+      document.getElementById('card2').addEventListener('click', (e) => {
+        if (e.target.tagName !== 'BUTTON') {
+          const rect = e.currentTarget.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          papers[1].createRipple(x, y, 6, 150);
+        }
+      });
+
+      setTimeout(() => {
+        statusEl.textContent = '✅ Ultra-smooth cloth physics loaded! Drag the cards, try the effects, or click anywhere on them for ripples!';
+      }, 500);
+
+    } catch (error) {
+      statusEl.textContent = `❌ Error: ${error.message}`;
+      statusEl.style.background = '#f8d7da';
+      statusEl.style.color = '#721c24';
+      console.error(error);
+    }
+  </script>
+</body>
+</html>

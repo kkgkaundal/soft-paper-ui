@@ -1,0 +1,53 @@
+{
+  "name": "soft-paper-ui",
+  "version": "1.0.0",
+  "description": "Lightweight canvas-based physics simulation that turns HTML elements into soft, draggable, gravity-affected paper with realistic curling/folding edges",
+  "main": "dist/index.umd.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "npm run clean && npm run build:esm && npm run build:umd && npm run build:types",
+    "build:esm": "tsc --module es2015 --outDir dist/esm",
+    "build:umd": "tsc --module commonjs --outDir dist/cjs && node scripts/build-umd.js",
+    "build:types": "tsc --declaration --emitDeclarationOnly --outDir dist",
+    "clean": "rm -rf dist",
+    "dev": "tsc --watch",
+    "lint": "echo 'No linter configured'",
+    "test": "echo 'No tests configured'",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "canvas",
+    "physics",
+    "animation",
+    "verlet",
+    "cloth",
+    "paper",
+    "ui",
+    "interactive",
+    "simulation",
+    "2d",
+    "soft-body",
+    "typescript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kkgkaundal/soft-paper-ui.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kkgkaundal/soft-paper-ui/issues"
+  },
+  "homepage": "https://github.com/kkgkaundal/soft-paper-ui#readme",
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ]
+}

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grid Overflow Demo - Soft Paper UI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      width: 100%;
+    }
+
+    h1 {
+      text-align: center;
+      color: white;
+      margin-bottom: 20px;
+      font-size: 2.5rem;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .subtitle {
+      text-align: center;
+      color: rgba(255,255,255,0.9);
+      margin-bottom: 40px;
+      font-size: 1.1rem;
+    }
+
+    /* Grid container with unified canvas overlay */
+    .grid-wrapper {
+      position: relative;
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border-radius: 20px;
+      padding: 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      position: relative;
+    }
+
+    .showcase-card {
+      background: white;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      min-height: 350px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+
+    .showcase-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+      color: #1e293b;
+    }
+
+    .showcase-card p {
+      color: #64748b;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .showcase-card ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .showcase-card li {
+      color: #475569;
+      padding: 8px 0;
+      padding-left: 24px;
+      position: relative;
+      font-size: 0.9rem;
+    }
+
+    .showcase-card li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #10b981;
+      font-weight: bold;
+    }
+
+    /* Unified canvas overlay */
+    #unified-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      pointer-events: auto;
+      border-radius: 20px;
+    }
+
+    .instructions {
+      text-align: center;
+      color: white;
+      margin-top: 30px;
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+
+    .instructions strong {
+      color: #fbbf24;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🌊 Cross-Card Wave Flow</h1>
+    <p class="subtitle">Watch waves and ripples flow across multiple cards seamlessly!</p>
+    
+    <div class="grid-wrapper" id="grid-container">
+      <!-- Unified canvas will be inserted here by SoftPaper -->
+      
+      <div class="showcase-grid">
+        <div class="showcase-card">
+          <span class="badge">Product Card</span>
+          <h3>Premium Feature</h3>
+          <p>Click anywhere to create ripples that flow across ALL cards in the grid!</p>
+          <ul>
+            <li>Cross-card propagation</li>
+            <li>Unified physics simulation</li>
+            <li>Seamless wave flow</li>
+            <li>Natural cloth behavior</li>
+          </ul>
+        </div>
+
+        <div class="showcase-card">
+          <span class="badge">Pricing Card</span>
+          <h3>$49/month</h3>
+          <p>Drag anywhere and watch the entire grid respond as one connected cloth surface.</p>
+          <ul>
+            <li>Grid-wide effects</li>
+            <li>Continuous physics</li>
+            <li>No boundaries</li>
+            <li>Smooth transitions</li>
+          </ul>
+        </div>
+
+        <div class="showcase-card">
+          <span class="badge">Team Card</span>
+          <h3>Meet Sarah</h3>
+          <p>Every interaction affects the entire grid - it's all one connected fabric!</p>
+          <ul>
+            <li>Unified simulation</li>
+            <li>Cross-element waves</li>
+            <li>Shared physics</li>
+            <li>Grid cohesion</li>
+          </ul>
+        </div>
+
+        <div class="showcase-card">
+          <span class="badge">Dashboard Widget</span>
+          <h3>Analytics</h3>
+          <p>Watch how clicks near card edges create ripples that reach neighboring cards.</p>
+          <ul>
+            <li>Edge overflow</li>
+            <li>Neighbor influence</li>
+            <li>Boundary-free</li>
+            <li>Complete freedom</li>
+          </ul>
+        </div>
+
+        <div class="showcase-card">
+          <span class="badge">Notification</span>
+          <h3>Achievement! 🎉</h3>
+          <p>You've discovered true cross-card physics. Waves know no boundaries here!</p>
+          <ul>
+            <li>Full grid coverage</li>
+            <li>No isolation</li>
+            <li>Pure fluidity</li>
+            <li>Connected experience</li>
+          </ul>
+        </div>
+
+        <div class="showcase-card">
+          <span class="badge">Call To Action</span>
+          <h3>Get Started</h3>
+          <p>One canvas, one simulation, infinite possibilities across your entire layout.</p>
+          <ul>
+            <li>Easy integration</li>
+            <li>Flexible layouts</li>
+            <li>TypeScript ready</li>
+            <li>Full control</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <p class="instructions">
+      <strong>Try it:</strong> Click or drag anywhere on the grid - watch waves flow across all cards!
+    </p>
+  </div>
+
+  <script type="module">
+    import { SoftPaper } from '../dist/esm/index.js';
+
+    // Wait for DOM to be ready
+    document.addEventListener('DOMContentLoaded', () => {
+      const gridContainer = document.getElementById('grid-container');
+      
+      // Create one unified SoftPaper instance for the entire grid
+      const unifiedPaper = new SoftPaper(gridContainer, {
+        interactive: true,
+        shadow: true,
+        hoverEffect: true,
+        gravity: 0.04,
+        stiffness: 0.35,
+        damping: 0.98,
+        iterations: 14,
+        dragRadius: 40,
+        tearThreshold: 5.0
+      });
+
+      // Add automatic wave animation every 3 seconds
+      setInterval(() => {
+        const directions = ['horizontal', 'vertical', 'diagonal'];
+        const randomDir = directions[Math.floor(Math.random() * directions.length)];
+        unifiedPaper.createWave?.(randomDir, 6, 0.3);
+      }, 3000);
+
+      console.log('✨ Unified Grid Physics Active!');
+      console.log('🌊 Waves flow across ALL cards');
+      console.log('🎯 Click anywhere to create cross-card ripples');
+      console.log('✋ Drag to move the entire cloth surface');
+    });
+  </script>
+</body>
+</html>

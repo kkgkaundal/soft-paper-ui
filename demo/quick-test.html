@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quick Visual Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background: #f0f0f0;
+    }
+    
+    .test-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      border-radius: 15px;
+      width: 300px;
+      text-align: center;
+      border: 3px solid white;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    
+    .test-card h2 {
+      margin: 0 0 10px 0;
+      font-size: 28px;
+    }
+    
+    .test-card p {
+      margin: 0;
+      font-size: 16px;
+    }
+    
+    .status {
+      margin-top: 30px;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    
+    .success { color: #2e7d32; }
+    .error { color: #c62828; }
+  </style>
+</head>
+<body>
+  <h1>🔍 Quick Visual Test</h1>
+  <p><strong>What you should see:</strong> A purple gradient card below that you can drag with cloth physics.</p>
+  
+  <div class="test-card" id="card">
+    <h2>🎨 Drag Me!</h2>
+    <p>This should have physics</p>
+  </div>
+  
+  <div class="status" id="status">Initializing...</div>
+  
+  <script type="module">
+    import { SoftPaper } from '../dist/esm/index.js';
+    
+    const statusEl = document.getElementById('status');
+    
+    function updateStatus(message, isError = false) {
+      statusEl.textContent = message;
+      statusEl.className = 'status ' + (isError ? 'error' : 'success');
+    }
+    
+    try {
+      // Simple initialization
+      const paper = new SoftPaper('#card', {
+        gravity: 0.15,
+        interactive: true,
+        shadow: true
+      });
+      
+      // Check after 2 seconds
+      setTimeout(() => {
+        const texture = paper.getTexture();
+        const canvas = paper.getCanvas();
+        
+        updateStatus(`✅ SUCCESS! Texture: ${texture.width}x${texture.height}, Canvas: ${canvas.width}x${canvas.height}`);
+        
+        console.log('Physics canvas:', canvas);
+        console.log('Texture canvas:', texture);
+        console.log('Canvas visible?', canvas.style.display !== 'none');
+        console.log('Canvas zIndex:', canvas.style.zIndex || 'auto');
+      }, 2000);
+      
+    } catch (error) {
+      updateStatus(`❌ ERROR: ${error.message}`, true);
+      console.error(error);
+    }
+  </script>
+</body>
+</html>

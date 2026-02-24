@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soft Paper UI - Realistic Physics for Your UI Elements</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --primary-light: #818cf8;
+      --secondary: #ec4899;
+      --text-dark: #1e293b;
+      --text-light: #64748b;
+      --bg-light: #f8fafc;
+      --bg-white: #ffffff;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.15);
+      --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-light);
+      color: var(--text-dark);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    nav .logo {
+      font-size: 1.5rem;
+      font-weight: 900;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    nav .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--text-dark);
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: var(--primary);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--primary);
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      border: 2px solid var(--primary);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-secondary:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--gradient-1);
+      position: relative;
+      overflow: hidden;
+      padding: 100px 20px 60px;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      top: -250px;
+      right: -250px;
+      animation: float 20s infinite ease-in-out;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      bottom: -150px;
+      left: -150px;
+      animation: float 15s infinite ease-in-out reverse;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-30px) rotate(180deg); }
+    }
+
+    .hero-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 900;
+      color: white;
+      margin-bottom: 1.5rem;
+      line-height: 1.1;
+    }
+
+    .hero .subtitle {
+      font-size: clamp(1.1rem, 2vw, 1.5rem);
+      color: rgba(255, 255, 255, 0.95);
+      margin-bottom: 3rem;
+      font-weight: 300;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 4rem;
+    }
+
+    .hero-buttons .btn-primary {
+      background: white;
+      color: var(--primary);
+      font-size: 1.1rem;
+      padding: 1rem 2rem;
+    }
+
+    .hero-buttons .btn-secondary {
+      border-color: white;
+      color: white;
+      font-size: 1.1rem;
+      padding: 1rem 2rem;
+    }
+
+    .hero-buttons .btn-secondary:hover {
+      background: white;
+      color: var(--primary);
+    }
+
+    /* Demo Cards in Hero */
+    .hero-demo {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 4rem;
+    }
+
+    .paper-card {
+      width: 240px;
+      background: white;
+      padding: 2rem 1.5rem;
+      border-radius: 12px;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+    }
+
+    .paper-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-dark);
+    }
+
+    .paper-card .card-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      margin-bottom: 1.5rem;
+    }
+
+    .paper-card .feature-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .paper-card .feature-list li {
+      padding: 0.5rem 0;
+      font-size: 0.9rem;
+      color: var(--text-light);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .paper-card .feature-list li::before {
+      content: '✓';
+      color: var(--primary);
+      font-weight: bold;
+    }
+
+    /* Features Section */
+    .section {
+      padding: 5rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .section-header h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+
+    .section-header p {
+      font-size: 1.2rem;
+      color: var(--text-light);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+
+    .feature-card {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .feature-icon {
+      width: 60px;
+      height: 60px;
+      background: var(--gradient-1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+    }
+
+    .feature-card h3 {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-card p {
+      color: var(--text-light);
+      line-height: 1.7;
+    }
+
+    /* Interactive Demo Section */
+    .demo-section {
+      background: var(--bg-white);
+      padding: 5rem 2rem;
+    }
+
+    .demo-playground {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    @media (max-width: 968px) {
+      .demo-playground {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .demo-canvas-area {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 20px;
+      padding: 3rem;
+      min-height: 600px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .demo-element {
+      width: 200px;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      position: relative;
+    }
+
+    .demo-element h4 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .demo-element p {
+      font-size: 0.85rem;
+      color: var(--text-light);
+    }
+
+    .controls-panel {
+      background: white;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 100px;
+    }
+
+    .controls-panel h3 {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .control-group {
+      margin-bottom: 2rem;
+    }
+
+    .control-group label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .control-group .value {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .control-group input[type="range"] {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: #e2e8f0;
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    .control-group input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--primary);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .control-group input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+    }
+
+    .control-group input[type="range"]::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--primary);
+      cursor: pointer;
+      border: none;
+    }
+
+    .control-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 2rem;
+    }
+
+    .control-buttons button {
+      width: 100%;
+      padding: 0.85rem;
+      border-radius: 8px;
+      border: 2px solid var(--primary);
+      background: transparent;
+      color: var(--primary);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 0.95rem;
+    }
+
+    .control-buttons button:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    .control-buttons button.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .stats {
+      margin-top: 2rem;
+      padding: 1rem;
+      background: var(--bg-light);
+      border-radius: 8px;
+      font-size: 0.85rem;
+    }
+
+    .stats div {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+
+    .stats strong {
+      color: var(--primary);
+    }
+
+    /* Code Section */
+    .code-section {
+      background: var(--text-dark);
+      color: white;
+      padding: 5rem 2rem;
+    }
+
+    .code-examples {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .code-tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .code-tab {
+      padding: 0.75rem 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 600;
+    }
+
+    .code-tab.active {
+      background: var(--primary);
+    }
+
+    .code-block {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 2rem;
+      overflow-x: auto;
+    }
+
+    .code-block pre {
+      font-family: 'JetBrains Mono', monospace;
+      margin: 0;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .code-block code {
+      color: #a5b4fc;
+    }
+
+    .code-block .comment {
+      color: #64748b;
+    }
+
+    .code-block .keyword {
+      color: #f472b6;
+    }
+
+    .code-block .string {
+      color: #34d399;
+    }
+
+    .code-block .function {
+      color: #fbbf24;
+    }
+
+    /* Installation Section */
+    .install-section {
+      padding: 5rem 2rem;
+      background: var(--bg-white);
+    }
+
+    .install-card {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 3rem;
+      border-radius: 20px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .install-steps {
+      display: grid;
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .install-step {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      background: var(--gradient-1);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .step-content h3 {
+      margin-bottom: 0.5rem;
+    }
+
+    .step-content p {
+      color: var(--text-light);
+      margin-bottom: 1rem;
+    }
+
+    .install-command {
+      background: var(--text-dark);
+      color: #a5b4fc;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      position: relative;
+      overflow-x: auto;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--text-dark);
+      color: white;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    footer .footer-links {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    footer a {
+      color: white;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    footer a:hover {
+      color: var(--primary-light);
+    }
+
+    footer p {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-in {
+      animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      nav {
+        padding: 1rem;
+      }
+
+      nav .nav-links {
+        display: none;
+      }
+
+      .hero {
+        padding: 80px 20px 40px;
+      }
+
+      .hero-demo {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .section {
+        padding: 3rem 1rem;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .code-tabs {
+        flex-wrap: wrap;
+      }
+
+      .demo-canvas-area {
+        padding: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="logo">🧻 Soft Paper UI</div>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#demo">Demo</a>
+      <a href="#installation">Install</a>
+      <a href="https://github.com/kkgkaundal/soft-paper-ui" target="_blank" class="btn-primary">GitHub</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content animate-in">
+      <h1>Physics-Based UI<br>That Feels Real</h1>
+      <p class="subtitle">
+        Transform your HTML elements into soft, draggable, gravity-affected paper with realistic cloth physics.
+        Zero dependencies, pure TypeScript, and incredibly lightweight.
+      </p>
+      <div class="hero-buttons">
+        <a href="#installation" class="btn-primary">Get Started</a>
+        <a href="#demo" class="btn-secondary">Try Demo</a>
+      </div>
+      
+      <div class="hero-demo">
+        <div id="hero1" class="paper-card">
+          <h3>⚡ Ultra Fast</h3>
+          <p class="card-subtitle">Optimized Verlet Physics</p>
+          <ul class="feature-list">
+            <li>60 FPS smooth</li>
+            <li>&lt;5% CPU usage</li>
+            <li>Canvas-based</li>
+          </ul>
+        </div>
+
+        <div id="hero2" class="paper-card">
+          <h3>🎨 Customizable</h3>
+          <p class="card-subtitle">Fine-tune Every Detail</p>
+          <ul class="feature-list">
+            <li>Gravity control</li>
+            <li>Wind effects</li>
+            <li>Tear mechanics</li>
+          </ul>
+        </div>
+
+        <div id="hero3" class="paper-card">
+          <h3>📦 Zero Deps</h3>
+          <p class="card-subtitle">Pure TypeScript</p>
+          <ul class="feature-list">
+            <li>No frameworks</li>
+            <li>Tree-shakeable</li>
+            <li>ESM + UMD</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="section">
+    <div class="section-header">
+      <h2>Powerful Features</h2>
+      <p>Everything you need for realistic physics-based UI interactions</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <h3>Advanced Physics</h3>
+        <p>
+          Verlet integration with air resistance, friction, and collision detection. 
+          Papers bounce off boundaries with realistic damping and ground friction.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">💨</div>
+        <h3>Wind &amp; Forces</h3>
+        <p>
+          Add dynamic wind oscillation with configurable strength and frequency. 
+          Create realistic environmental effects that respond to user interaction.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">✂️</div>
+        <h3>Tear Mechanics</h3>
+        <p>
+          Constraints break when stretched beyond threshold, creating realistic tearing effects. 
+          Papers can be torn apart and repaired programmatically.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🖱️</div>
+        <h3>Smart Interactions</h3>
+        <p>
+          Hover effects gently repel particles. Drag with momentum for natural feel. 
+          Full mouse and touch support with multi-touch ready.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🎛️</div>
+        <h3>Real-time Control</h3>
+        <p>
+          Update physics parameters on-the-fly. Toggle effects, adjust gravity, 
+          modify stiffness - all without recreating instances.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">⚙️</div>
+        <h3>TypeScript First</h3>
+        <p>
+          Written in TypeScript with full type definitions. Excellent IDE support, 
+          autocomplete, and compile-time type checking out of the box.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Demo Section -->
+  <section id="demo" class="demo-section">
+    <div class="section-header">
+      <h2>Interactive Playground</h2>
+      <p>Drag, drop, and play with physics in real-time</p>
+    </div>
+
+    <div class="demo-playground">
+      <div class="demo-canvas-area">
+        <div id="demo1" class="demo-element">
+          <h4>📝 Note</h4>
+          <p>Drag me around and watch the physics!</p>
+        </div>
+
+        <div id="demo2" class="demo-element">
+          <h4>💳 Card</h4>
+          <p>I tear if you pull too hard!</p>
+        </div>
+
+        <div id="demo3" class="demo-element">
+          <h4>🎫 Ticket</h4>
+          <p>Feel the realistic bounce!</p>
+        </div>
+
+        <div id="demo4" class="demo-element">
+          <h4>📄 Receipt</h4>
+          <p>Hover near me!</p>
+        </div>
+      </div>
+
+      <div class="controls-panel">
+        <h3>Physics Controls</h3>
+        
+        <div class="control-group">
+          <label>
+            <span>Gravity</span>
+            <span class="value" id="gravityValue">0.18</span>
+          </label>
+          <input type="range" id="gravity" min="0" max="0.5" step="0.01" value="0.18">
+        </div>
+
+        <div class="control-group">
+          <label>
+            <span>Stiffness</span>
+            <span class="value" id="stiffnessValue">0.85</span>
+          </label>
+          <input type="range" id="stiffness" min="0.1" max="1" step="0.05" value="0.85">
+        </div>
+
+        <div class="control-group">
+          <label>
+            <span>Damping</span>
+            <span class="value" id="dampingValue">0.92</span>
+          </label>
+          <input type="range" id="damping" min="0.5" max="0.99" step="0.01" value="0.92">
+        </div>
+
+        <div class="control-group">
+          <label>
+            <span>Air Resistance</span>
+            <span class="value" id="airResistanceValue">0.995</span>
+          </label>
+          <input type="range" id="airResistance" min="0.95" max="1" step="0.005" value="0.995">
+        </div>
+
+        <div class="control-buttons">
+          <button id="toggleWind">Toggle Wind</button>
+          <button id="toggleHover" class="active">Hover Effect: ON</button>
+          <button id="repairTears">Repair Tears</button>
+          <button id="reset">Reset All</button>
+        </div>
+
+        <div class="stats">
+          <div>
+            <span>FPS:</span>
+            <strong id="fps">60</strong>
+          </div>
+          <div>
+            <span>Torn Constraints:</span>
+            <strong id="tornCount">0</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Code Examples Section -->
+  <section id="usage" class="code-section">
+    <div class="code-examples">
+      <div class="section-header">
+        <h2>Simple yet Powerful</h2>
+        <p>Get started with just a few lines of code</p>
+      </div>
+
+      <div class="code-tabs">
+        <div class="code-tab active" data-tab="basic">Basic Usage</div>
+        <div class="code-tab" data-tab="advanced">Advanced</div>
+        <div class="code-tab" data-tab="api">API</div>
+      </div>
+
+      <div class="code-block" id="codeBasic">
+        <pre><code><span class="comment">// Install</span>
+<span class="keyword">npm install</span> soft-paper-ui
+
+<span class="comment">// Import</span>
+<span class="keyword">import</span> { SoftPaper } <span class="keyword">from</span> <span class="string">'soft-paper-ui'</span>;
+
+<span class="comment">// Create soft paper effect</span>
+<span class="keyword">const</span> paper = <span class="keyword">new</span> <span class="function">SoftPaper</span>(<span class="string">'#myElement'</span>, {
+  <span class="keyword">gravity:</span> <span class="string">0.18</span>,
+  <span class="keyword">stiffness:</span> <span class="string">0.85</span>,
+  <span class="keyword">interactive:</span> <span class="keyword">true</span>,
+  <span class="keyword">shadow:</span> <span class="keyword">true</span>
+});
+
+<span class="comment">// That's it! Your element now has physics 🎉</span></code></pre>
+      </div>
+
+      <div class="code-block" id="codeAdvanced" style="display: none;">
+        <pre><code><span class="comment">// Advanced configuration</span>
+<span class="keyword">const</span> paper = <span class="keyword">new</span> <span class="function">SoftPaper</span>(<span class="string">'#element'</span>, {
+  <span class="comment">// Grid resolution</span>
+  <span class="keyword">grid:</span> { <span class="keyword">cols:</span> <span class="string">10</span>, <span class="keyword">rows:</span> <span class="string">20</span> },
+  
+  <span class="comment">// Physics parameters</span>
+  <span class="keyword">gravity:</span> <span class="string">0.18</span>,
+  <span class="keyword">stiffness:</span> <span class="string">0.85</span>,
+  <span class="keyword">damping:</span> <span class="string">0.92</span>,
+  <span class="keyword">airResistance:</span> <span class="string">0.995</span>,
+  <span class="keyword">friction:</span> <span class="string">0.98</span>,
+  <span class="keyword">iterations:</span> <span class="string">6</span>,
+  
+  <span class="comment">// Tear mechanics</span>
+  <span class="keyword">tearThreshold:</span> <span class="string">3.0</span>,  <span class="comment">// 3x rest length</span>
+  
+  <span class="comment">// Effects</span>
+  <span class="keyword">wind:</span> <span class="keyword">true</span>,
+  <span class="keyword">windStrength:</span> <span class="string">0.05</span>,
+  <span class="keyword">windFrequency:</span> <span class="string">0.02</span>,
+  <span class="keyword">hoverEffect:</span> <span class="keyword">true</span>,
+  <span class="keyword">hoverRadius:</span> <span class="string">80</span>,
+  
+  <span class="comment">// Interaction</span>
+  <span class="keyword">interactive:</span> <span class="keyword">true</span>,
+  <span class="keyword">dragRadius:</span> <span class="string">50</span>,
+  <span class="keyword">boundaries:</span> <span class="keyword">true</span>
+});
+
+<span class="comment">// Dynamic updates</span>
+paper.<span class="function">updateConfig</span>({ <span class="keyword">gravity:</span> <span class="string">0.3</span> });
+paper.<span class="function">setWind</span>(<span class="keyword">true</span>);
+paper.<span class="function">repairTears</span>();</code></pre>
+      </div>
+
+      <div class="code-block" id="codeApi" style="display: none;">
+        <pre><code><span class="comment">// API Methods</span>
+
+<span class="comment">// Start/stop animation</span>
+paper.<span class="function">start</span>();
+paper.<span class="function">stop</span>();
+
+<span class="comment">// Update physics in real-time</span>
+paper.<span class="function">updateConfig</span>({
+  <span class="keyword">gravity:</span> <span class="string">0.25</span>,
+  <span class="keyword">stiffness:</span> <span class="string">0.9</span>,
+  <span class="keyword">damping:</span> <span class="string">0.95</span>
+});
+
+<span class="comment">// Wind control</span>
+paper.<span class="function">setWind</span>(<span class="keyword">true</span>);
+<span class="keyword">const</span> isWindy = paper.<span class="function">isWindEnabled</span>();
+
+<span class="comment">// Tear mechanics</span>
+<span class="keyword">const</span> tornCount = paper.<span class="function">getTornCount</span>();
+paper.<span class="function">repairTears</span>();
+
+<span class="comment">// Get current config</span>
+<span class="keyword">const</span> config = paper.<span class="function">getConfig</span>();
+
+<span class="comment">// Cleanup</span>
+paper.<span class="function">destroy</span>();  <span class="comment">// Removes canvas, restores element</span></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Installation Section -->
+  <section id="installation" class="install-section">
+    <div class="section-header">
+      <h2>Get Started in Minutes</h2>
+      <p>Choose your preferred method and start building</p>
+    </div>
+
+    <div class="install-card">
+      <div class="install-steps">
+        <div class="install-step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3>Install via npm</h3>
+            <p>Add soft-paper-ui to your project</p>
+            <div class="install-command">
+              npm install soft-paper-ui
+            </div>
+          </div>
+        </div>
+
+        <div class="install-step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3>Import in your code</h3>
+            <p>ESM, CommonJS, or UMD - your choice</p>
+            <div class="install-command">
+              import { SoftPaper } from 'soft-paper-ui';
+            </div>
+          </div>
+        </div>
+
+        <div class="install-step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3>Create your first paper</h3>
+            <p>Target any HTML element and apply physics</p>
+            <div class="install-command">
+              new SoftPaper('#element', { gravity: 0.18 });
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-links">
+      <a href="https://github.com/kkgkaundal/soft-paper-ui" target="_blank">GitHub</a>
+      <a href="https://www.npmjs.com/package/soft-paper-ui" target="_blank">npm</a>
+      <a href="https://github.com/kkgkaundal/soft-paper-ui/issues" target="_blank">Issues</a>
+      <a href="https://github.com/kkgkaundal/soft-paper-ui/blob/main/LICENSE" target="_blank">License</a>
+    </div>
+    <p>Made with ❤️ for creative developers</p>
+    <p style="margin-top: 1rem; font-size: 0.9rem;">© 2026 Soft Paper UI - MIT License</p>
+  </footer>
+
+  <script type="module">
+    import { SoftPaper } from '../dist/esm/index.js';
+
+    // Store all paper instances
+    const papers = {
+      hero: [],
+      demo: []
+    };
+
+    // Default options with ultra-smooth cloth-like physics
+    const defaultOptions = {
+      grid: { cols: 10, rows: 20 },
+      gravity: 0.06,
+      stiffness: 0.60,
+      damping: 0.985,
+      airResistance: 0.9995,
+      friction: 0.997,
+      iterations: 12,
+      tearThreshold: 25.0,
+      interactive: true,
+      shadow: true,
+      wind: false,
+      windStrength: 0.02,
+      windFrequency: 0.01,
+      boundaries: true,
+      hoverEffect: true,
+      hoverRadius: 180,
+      dragRadius: 120,
+      grabRadius: 70  // Real cloth grab cluster
+    };
+
+    // Initialize hero cards
+    function initHeroCards() {
+      const heroOptions = { ...defaultOptions, interactive: true, hoverEffect: true };
+      papers.hero.push(new SoftPaper('#hero1', heroOptions));
+      papers.hero.push(new SoftPaper('#hero2', heroOptions));
+      papers.hero.push(new SoftPaper('#hero3', heroOptions));
+    }
+
+    // Initialize demo elements
+    function initDemoElements() {
+      const demoOptions = { ...defaultOptions };
+      papers.demo.push(new SoftPaper('#demo1', demoOptions));
+      papers.demo.push(new SoftPaper('#demo2', demoOptions));
+      papers.demo.push(new SoftPaper('#demo3', demoOptions));
+      papers.demo.push(new SoftPaper('#demo4', demoOptions));
+    }
+
+    // Initialize all papers
+    initHeroCards();
+    initDemoElements();
+
+    // Get control elements
+    const gravitySlider = document.getElementById('gravity');
+    const stiffnessSlider = document.getElementById('stiffness');
+    const dampingSlider = document.getElementById('damping');
+    const airResistanceSlider = document.getElementById('airResistance');
+    
+    const gravityValue = document.getElementById('gravityValue');
+    const stiffnessValue = document.getElementById('stiffnessValue');
+    const dampingValue = document.getElementById('dampingValue');
+    const airResistanceValue = document.getElementById('airResistanceValue');
+    
+    const toggleWindBtn = document.getElementById('toggleWind');
+    const toggleHoverBtn = document.getElementById('toggleHover');
+    const repairTearsBtn = document.getElementById('repairTears');
+    const resetBtn = document.getElementById('reset');
+    
+    const fpsDisplay = document.getElementById('fps');
+    const tornCountDisplay = document.getElementById('tornCount');
+
+    let windEnabled = false;
+    let hoverEnabled = true;
+
+    // Update gravity
+    gravitySlider.addEventListener('input', (e) => {
+      const value = parseFloat(e.target.value);
+      gravityValue.textContent = value.toFixed(2);
+      papers.demo.forEach(paper => paper.updateConfig({ gravity: value }));
+    });
+
+    // Update stiffness
+    stiffnessSlider.addEventListener('input', (e) => {
+      const value = parseFloat(e.target.value);
+      stiffnessValue.textContent = value.toFixed(2);
+      papers.demo.forEach(paper => paper.updateConfig({ stiffness: value }));
+    });
+
+    // Update damping
+    dampingSlider.addEventListener('input', (e) => {
+      const value = parseFloat(e.target.value);
+      dampingValue.textContent = value.toFixed(2);
+      papers.demo.forEach(paper => paper.updateConfig({ damping: value }));
+    });
+
+    // Update air resistance
+    airResistanceSlider.addEventListener('input', (e) => {
+      const value = parseFloat(e.target.value);
+      airResistanceValue.textContent = value.toFixed(3);
+      papers.demo.forEach(paper => paper.updateConfig({ airResistance: value }));
+    });
+
+    // Toggle wind
+    toggleWindBtn.addEventListener('click', () => {
+      windEnabled = !windEnabled;
+      toggleWindBtn.textContent = windEnabled ? 'Wind: ON' : 'Wind: OFF';
+      toggleWindBtn.classList.toggle('active', windEnabled);
+      papers.demo.forEach(paper => paper.setWind(windEnabled));
+      papers.hero.forEach(paper => paper.setWind(windEnabled));
+    });
+
+    // Toggle hover effect
+    toggleHoverBtn.addEventListener('click', () => {
+      hoverEnabled = !hoverEnabled;
+      toggleHoverBtn.textContent = hoverEnabled ? 'Hover Effect: ON' : 'Hover Effect: OFF';
+      toggleHoverBtn.classList.toggle('active', hoverEnabled);
+      papers.demo.forEach(paper => paper.updateConfig({ hoverEffect: hoverEnabled }));
+    });
+
+    // Repair tears
+    repairTearsBtn.addEventListener('click', () => {
+      papers.demo.forEach(paper => paper.repairTears());
+      updateStats();
+    });
+
+    // Reset button
+    resetBtn.addEventListener('click', () => {
+      // Destroy demo papers
+      papers.demo.forEach(paper => paper.destroy());
+      papers.demo.length = 0;
+      
+      // Recreate with default options
+      initDemoElements();
+      
+      // Reset sliders
+      gravitySlider.value = defaultOptions.gravity;
+      stiffnessSlider.value = defaultOptions.stiffness;
+      dampingSlider.value = defaultOptions.damping;
+      airResistanceSlider.value = defaultOptions.airResistance;
+      
+      gravityValue.textContent = defaultOptions.gravity.toFixed(2);
+      stiffnessValue.textContent = defaultOptions.stiffness.toFixed(2);
+      dampingValue.textContent = defaultOptions.damping.toFixed(2);
+      airResistanceValue.textContent = defaultOptions.airResistance.toFixed(3);
+      
+      windEnabled = false;
+      toggleWindBtn.textContent = 'Wind: OFF';
+      toggleWindBtn.classList.remove('active');
+      
+      hoverEnabled = true;
+      toggleHoverBtn.textContent = 'Hover Effect: ON';
+      toggleHoverBtn.classList.add('active');
+    });
+
+    // Code tabs functionality
+    const codeTabs = document.querySelectorAll('.code-tab');
+    const codeBasic = document.getElementById('codeBasic');
+    const codeAdvanced = document.getElementById('codeAdvanced');
+    const codeApi = document.getElementById('codeApi');
+    
+    codeTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        codeTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        
+        const tabName = tab.getAttribute('data-tab');
+        codeBasic.style.display = tabName === 'basic' ? 'block' : 'none';
+        codeAdvanced.style.display = tabName === 'advanced' ? 'block' : 'none';
+        codeApi.style.display = tabName === 'api' ? 'block' : 'none';
+      });
+    });
+
+    // FPS Counter
+    let lastTime = performance.now();
+    let frames = 0;
+    let fps = 60;
+    
+    function updateFPS() {
+      frames++;
+      const currentTime = performance.now();
+      
+      if (currentTime >= lastTime + 1000) {
+        fps = Math.round((frames * 1000) / (currentTime - lastTime));
+        fpsDisplay.textContent = fps;
+        frames = 0;
+        lastTime = currentTime;
+      }
+      
+      requestAnimationFrame(updateFPS);
+    }
+    updateFPS();
+
+    // Update torn constraint count
+    function updateStats() {
+      let torn = 0;
+      papers.demo.forEach(paper => {
+        torn += paper.getTornCount();
+      });
+      tornCountDisplay.textContent = torn;
+    }
+    
+    // Update stats every second
+    setInterval(updateStats, 1000);
+
+    // Smooth scroll for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    // Animate elements on scroll
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-in');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.feature-card, .install-step').forEach(el => {
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>

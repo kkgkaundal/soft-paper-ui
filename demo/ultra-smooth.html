@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ultra-Smooth Dragging - Soft Paper UI</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+      min-height: 100vh;
+      padding: 50px 20px;
+    }
+
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      color: white;
+      text-align: center;
+      font-size: 4rem;
+      margin-bottom: 15px;
+      text-shadow: 0 6px 30px rgba(0,0,0,0.4);
+      letter-spacing: -1px;
+    }
+
+    .subtitle {
+      color: rgba(255,255,255,0.95);
+      text-align: center;
+      font-size: 1.8rem;
+      margin-bottom: 60px;
+      line-height: 1.8;
+      font-weight: 300;
+    }
+
+    .hero-card {
+      background: rgba(255,255,255,0.98);
+      border-radius: 30px;
+      padding: 60px;
+      margin-bottom: 60px;
+      box-shadow: 0 30px 100px rgba(0,0,0,0.5);
+      backdrop-filter: blur(20px);
+    }
+
+    .hero-card h2 {
+      color: #1e293b;
+      font-size: 2.8rem;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin: 40px 0;
+    }
+
+    .comparison-card {
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+    }
+
+    .before-card {
+      background: linear-gradient(135deg, #fee 0%, #fcc 100%);
+      border: 3px solid #e57373;
+    }
+
+    .after-card {
+      background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+      border: 3px solid #66bb6a;
+    }
+
+    .comparison-card h3 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    .before-card h3 { color: #c62828; }
+    .after-card h3 { color: #2e7d32; }
+
+    .metric {
+      background: rgba(255,255,255,0.9);
+      padding: 20px;
+      border-radius: 12px;
+      margin: 15px 0;
+    }
+
+    .metric .label {
+      font-size: 0.95rem;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .metric .value {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #1e293b;
+    }
+
+    .demo-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+      gap: 40px;
+      margin: 50px 0;
+    }
+
+    .cloth-card {
+      background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%);
+      color: white;
+      padding: 60px;
+      border-radius: 28px;
+      box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+      cursor: grab;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cloth-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .cloth-card:hover::before {
+      opacity: 1;
+    }
+
+    .cloth-card:hover {
+      box-shadow: 0 30px 100px rgba(0,0,0,0.5);
+    }
+
+    .cloth-card:active {
+      cursor: grabbing;
+    }
+
+    .cloth-card h3 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    .cloth-card p {
+      font-size: 1.3rem;
+      opacity: 0.95;
+      line-height: 1.8;
+    }
+
+    .variant-2 {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+
+    .variant-3 {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .variant-4 {
+      background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    }
+
+    .stats-panel {
+      background: white;
+      border-radius: 24px;
+      padding: 50px;
+      margin: 50px 0;
+      box-shadow: 0 20px 80px rgba(0,0,0,0.3);
+    }
+
+    .stats-panel h2 {
+      color: #1e293b;
+      font-size: 2.5rem;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 25px;
+    }
+
+    .stat-box {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 30px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(102,126,234,0.3);
+    }
+
+    .stat-box .number {
+      font-size: 3.5rem;
+      font-weight: bold;
+      display: block;
+      margin: 15px 0;
+    }
+
+    .stat-box .label {
+      font-size: 1.1rem;
+      opacity: 0.95;
+    }
+
+    .improvements-list {
+      background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%);
+      padding: 40px;
+      border-radius: 20px;
+      margin: 40px 0;
+    }
+
+    .improvements-list h3 {
+      color: #1e40af;
+      font-size: 2rem;
+      margin-bottom: 25px;
+      text-align: center;
+    }
+
+    .improvements-list ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .improvements-list li {
+      background: white;
+      padding: 20px 25px;
+      margin: 12px 0;
+      border-radius: 12px;
+      font-size: 1.15rem;
+      color: #334155;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .improvements-list li::before {
+      content: '✨';
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .code-block {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 30px;
+      border-radius: 16px;
+      margin: 30px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 1.05rem;
+      line-height: 1.8;
+      overflow-x: auto;
+    }
+
+    .highlight {
+      color: #fbbf24;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>✨ Ultra-Smooth Dragging</h1>
+    <div class="subtitle">
+      <strong>33% softer</strong> with cubic influence falloff<br>
+      Feel the buttery-smooth fabric physics
+    </div>
+
+    <div class="hero-card">
+      <h2>🎯 What's Different?</h2>
+      
+      <div class="comparison-grid">
+        <div class="comparison-card before-card">
+          <h3>❌ Before</h3>
+          <div class="metric">
+            <div class="label">Drag Force</div>
+            <div class="value">0.12</div>
+          </div>
+          <div class="metric">
+            <div class="label">Influence</div>
+            <div class="value">x²</div>
+          </div>
+          <div class="metric">
+            <div class="label">Hover Force</div>
+            <div class="value">0.08</div>
+          </div>
+          <div class="metric">
+            <div class="label">Damping</div>
+            <div class="value">0.980</div>
+          </div>
+        </div>
+
+        <div class="comparison-card after-card">
+          <h3>✅ Now</h3>
+          <div class="metric">
+            <div class="label">Drag Force</div>
+            <div class="value">0.08</div>
+          </div>
+          <div class="metric">
+            <div class="label">Influence</div>
+            <div class="value">x³</div>
+          </div>
+          <div class="metric">
+            <div class="label">Hover Force</div>
+            <div class="value">0.05</div>
+          </div>
+          <div class="metric">
+            <div class="label">Damping</div>
+            <div class="value">0.985</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <div class="cloth-card" id="cloth1">
+        <h3>🎨 Drag Me Slowly</h3>
+        <p>Notice how smoothly it follows your mouse with zero resistance. It's like moving through silk.</p>
+      </div>
+
+      <div class="cloth-card variant-2" id="cloth2">
+        <h3>🚀 Drag Me Fast</h3>
+        <p>Even with quick movements, the motion stays buttery smooth with no jittering.</p>
+      </div>
+
+      <div class="cloth-card variant-3" id="cloth3">
+        <h3>🌊 Feel The Flow</h3>
+        <p>The cubic influence creates an ultra-gentle gradient. Particles blend together seamlessly.</p>
+      </div>
+
+      <div class="cloth-card variant-4" id="cloth4">
+        <h3>💫 Release Physics</h3>
+        <p>Drag fast and let go - watch the smooth momentum transfer with perfect decay.</p>
+      </div>
+    </div>
+
+    <div class="stats-panel">
+      <h2>📊 Ultra-Smooth Metrics</h2>
+      
+      <div class="stats-grid">
+        <div class="stat-box">
+          <span class="number">0.08</span>
+          <span class="label">Drag Force<br>(33% softer)</span>
+        </div>
+        <div class="stat-box">
+          <span class="number">x³</span>
+          <span class="label">Cubic Influence<br>(gentler gradient)</span>
+        </div>
+        <div class="stat-box">
+          <span class="number">70px</span>
+          <span class="label">Grab Radius<br>(17% larger)</span>
+        </div>
+        <div class="stat-box">
+          <span class="number">0.9995</span>
+          <span class="label">Air Resistance<br>(ultra-high)</span>
+        </div>
+        <div class="stat-box">
+          <span class="number">0.985</span>
+          <span class="label">Damping<br>(0.5% higher)</span>
+        </div>
+        <div class="stat-box">
+          <span class="number">12</span>
+          <span class="label">Iterations<br>(20% more)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="improvements-list">
+      <h3>🎯 Key Improvements</h3>
+      <ul>
+        <li><strong>Drag force reduced 33%:</strong> 0.12 → 0.08 for ultra-soft feel</li>
+        <li><strong>Cubic influence (x³):</strong> Even gentler gradient than squared falloff</li>
+        <li><strong>Velocity reduced 37.5%:</strong> 0.04 → 0.025 for flowing motion</li>
+        <li><strong>Hover force reduced 37.5%:</strong> 0.08 → 0.05 with quartic (x⁴) falloff</li>
+        <li><strong>Damping increased:</strong> 0.98 → 0.985 for smoother decay</li>
+        <li><strong>Air resistance increased:</strong> 0.999 → 0.9995 for less bounce</li>
+        <li><strong>Larger grab radius:</strong> 60px → 70px for broader influence</li>
+        <li><strong>More iterations:</strong> 10 → 12 for 20% more accuracy</li>
+        <li><strong>Lower gravity:</strong> 0.08 → 0.06 for dreamier float</li>
+        <li><strong>Gentler momentum:</strong> 0.3 → 0.2 on release for smooth flow</li>
+      </ul>
+    </div>
+
+    <div class="stats-panel">
+      <h2>💻 Implementation Details</h2>
+      
+      <div class="code-block">
+<span class="highlight">// Cubic influence falloff (gentler than x²)</span>
+const influence = 1.0 - (distance / grabRadius);
+const cubicInfluence = influence³;  <span class="highlight">// Ultra-smooth gradient</span>
+
+<span class="highlight">// Ultra-soft drag force</span>
+const dragForce = <span class="highlight">0.08</span> × cubicInfluence;  <span class="highlight">// 33% softer</span>
+const velFactor = <span class="highlight">0.025</span> × cubicInfluence; <span class="highlight">// 37.5% less</span>
+
+particle.pos += delta × dragForce;
+particle.velocity = delta × velFactor;
+
+<span class="highlight">// Quartic hover falloff (x⁴ - even smoother)</span>
+const hoverFalloff = (1 - distance / radius)<span class="highlight">⁴</span>;
+const hoverForce = <span class="highlight">0.05</span> × hoverFalloff;  <span class="highlight">// 37.5% weaker</span>
+      </div>
+
+      <h3 style="color: #1e293b; font-size: 2rem; margin: 40px 0 20px; text-align: center;">
+        🎨 The Result
+      </h3>
+      <p style="font-size: 1.3rem; color: #475569; text-align: center; line-height: 1.8; margin-top: 20px;">
+        The smoothest, most butter-like dragging experience possible.<br>
+        Particles flow together in perfect harmony with <strong>zero resistance feel</strong>.<br>
+        It's like moving clouds through the air. ☁️
+      </p>
+    </div>
+  </div>
+
+  <script type="module">
+    import { SoftPaper } from '../dist/esm/index.js';
+
+    try {
+      // Initialize all cloth cards with ultra-smooth physics
+      const papers = [
+        new SoftPaper('#cloth1', { interactive: true, shadow: true, hoverEffect: true }),
+        new SoftPaper('#cloth2', { interactive: true, shadow: true, hoverEffect: true }),
+        new SoftPaper('#cloth3', { interactive: true, shadow: true, hoverEffect: true }),
+        new SoftPaper('#cloth4', { interactive: true, shadow: true, hoverEffect: true })
+      ];
+
+      console.log('✨ Ultra-smooth physics loaded!');
+      console.log('🎯 Drag force: 0.08 (33% softer)');
+      console.log('📐 Cubic influence: x³ (gentler gradient)');
+      console.log('🌊 Quartic hover: x⁴ (ultra-smooth)');
+
+    } catch (error) {
+      console.error('❌ Error:', error);
+    }
+  </script>
+</body>
+</html>

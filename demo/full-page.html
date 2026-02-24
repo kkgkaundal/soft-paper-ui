@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soft Paper UI - Full Page Interactive Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #6366f1;
+      --secondary: #ec4899;
+      --accent: #14b8a6;
+      --dark: #0f172a;
+      --light: #f8fafc;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--dark);
+      color: white;
+      overflow-x: hidden;
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      position: relative;
+      overflow: hidden;
+      padding: 2rem;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="2" cy="2" r="1" fill="white" opacity="0.1"/></svg>');
+      animation: float 20s infinite linear;
+    }
+
+    @keyframes float {
+      from { transform: translateY(0) rotate(0deg); }
+      to { transform: translateY(-50px) rotate(360deg); }
+    }
+
+    .hero-content {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      max-width: 1400px;
+      width: 100%;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 900;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      line-height: 1.1;
+    }
+
+    .hero .tagline {
+      font-size: clamp(1.2rem, 3vw, 1.8rem);
+      margin-bottom: 3rem;
+      opacity: 0.95;
+      font-weight: 300;
+    }
+
+    .hero-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 4rem;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-card {
+      background: white;
+      color: var(--dark);
+      padding: 2.5rem 2rem;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      transition: transform 0.3s;
+    }
+
+    .hero-card:hover {
+      transform: scale(1.02);
+    }
+
+    .hero-card h3 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+      color: var(--primary);
+    }
+
+    .hero-card p {
+      color: #64748b;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-card .stats {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-card .stat {
+      flex: 1;
+      min-width: 100px;
+    }
+
+    .hero-card .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .hero-card .stat-label {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Dashboard Section */
+    .dashboard {
+      min-height: 100vh;
+      padding: 5rem 2rem;
+      background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .section-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      margin-bottom: 1rem;
+    }
+
+    .section-header p {
+      font-size: 1.2rem;
+      color: #94a3b8;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .dashboard-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 2rem;
+      position: relative;
+    }
+
+    .dashboard-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      color: white;
+    }
+
+    .metric {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+    }
+
+    .metric-label {
+      color: #94a3b8;
+    }
+
+    .metric-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    /* Notes Section */
+    .notes-section {
+      min-height: 100vh;
+      padding: 5rem 2rem;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #fda085 100%);
+    }
+
+    .sticky-notes {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2.5rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .sticky-note {
+      background: #fef08a;
+      padding: 2rem;
+      border-radius: 4px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      min-height: 250px;
+      position: relative;
+    }
+
+    .sticky-note::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 40px;
+      background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, transparent 100%);
+      border-radius: 4px 4px 0 0;
+    }
+
+    .sticky-note h4 {
+      font-size: 1.3rem;
+      color: #854d0e;
+      margin-bottom: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .sticky-note p {
+      color: #713f12;
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+
+    .sticky-note.blue {
+      background: #bae6fd;
+    }
+
+    .sticky-note.blue h4 {
+      color: #075985;
+    }
+
+    .sticky-note.blue p {
+      color: #0c4a6e;
+    }
+
+    .sticky-note.pink {
+      background: #fecdd3;
+    }
+
+    .sticky-note.pink h4 {
+      color: #9f1239;
+    }
+
+    .sticky-note.pink p {
+      color: #881337;
+    }
+
+    .sticky-note.green {
+      background: #bbf7d0;
+    }
+
+    .sticky-note.green h4 {
+      color: #166534;
+    }
+
+    .sticky-note.green p {
+      color: #14532d;
+    }
+
+    /* Cards Section */
+    .cards-section {
+      min-height: 100vh;
+      padding: 5rem 2rem;
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 50%, #43e97b 100%);
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 3rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    }
+
+    .product-card .card-image {
+      width: 100%;
+      height: 250px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+    }
+
+    .product-card .card-content {
+      padding: 2rem;
+      color: var(--dark);
+    }
+
+    .product-card h3 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+      color: var(--dark);
+    }
+
+    .product-card .price {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 1rem 0;
+    }
+
+    .product-card p {
+      color: #64748b;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .product-card .features {
+      list-style: none;
+      margin-bottom: 1.5rem;
+    }
+
+    .product-card .features li {
+      padding: 0.5rem 0;
+      color: #475569;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .product-card .features li::before {
+      content: '✓';
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    .product-card .btn {
+      width: 100%;
+      padding: 1rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .product-card .btn:hover {
+      background: var(--secondary);
+      transform: translateY(-2px);
+    }
+
+    /* Receipts Section */
+    .receipts-section {
+      min-height: 100vh;
+      padding: 5rem 2rem;
+      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    }
+
+    .receipts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2.5rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .receipt {
+      background: white;
+      padding: 2.5rem 2rem;
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      color: var(--dark);
+      font-family: 'Courier New', monospace;
+    }
+
+    .receipt h3 {
+      text-align: center;
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .receipt .date {
+      text-align: center;
+      color: #64748b;
+      font-size: 0.85rem;
+      margin-bottom: 2rem;
+    }
+
+    .receipt .receipt-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+      font-size: 0.9rem;
+    }
+
+    .receipt .divider {
+      border-top: 2px dashed #cbd5e1;
+      margin: 1.5rem 0;
+    }
+
+    .receipt .total {
+      display: flex;
+      justify-content: space-between;
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-top: 1rem;
+      padding-top: 1rem;
+    }
+
+    .receipt .footer {
+      text-align: center;
+      margin-top: 2rem;
+      color: #64748b;
+      font-size: 0.85rem;
+    }
+
+    /* Controls Panel */
+    .controls-panel {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 1.5rem;
+      min-width: 300px;
+      max-width: 350px;
+      z-index: 1000;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+
+    .controls-panel h3 {
+      margin-bottom: 1.5rem;
+      font-size: 1.2rem;
+    }
+
+    .control-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .control-group label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      color: #94a3b8;
+    }
+
+    .control-group .value {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .control-group input[type="range"] {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.1);
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    .control-group input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .control-group input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+    }
+
+    .control-group input[type="range"]::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      border: none;
+    }
+
+    .control-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .control-buttons button {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: transparent;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 0.9rem;
+    }
+
+    .control-buttons button:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .control-buttons button.active {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .stats {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.85rem;
+    }
+
+    .stats div {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      color: #94a3b8;
+    }
+
+    .stats strong {
+      color: var(--accent);
+    }
+
+    .controls-toggle {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 1rem 1.5rem;
+      border-radius: 50px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(20, 184, 166, 0.5);
+      z-index: 999;
+      transition: all 0.3s;
+    }
+
+    .controls-toggle:hover {
+      transform: scale(1.05);
+    }
+
+    .controls-panel.hidden {
+      display: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-cards {
+        grid-template-columns: 1fr;
+      }
+
+      .dashboard-grid,
+      .sticky-notes,
+      .cards-grid,
+      .receipts-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .controls-panel {
+        bottom: 1rem;
+        right: 1rem;
+        left: 1rem;
+        max-width: none;
+      }
+
+      .controls-toggle {
+        bottom: 1rem;
+        right: 1rem;
+      }
+    }
+
+    /* Scroll indicator */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: bounce 2s infinite;
+      cursor: pointer;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateX(-50%) translateY(0);
+      }
+      40% {
+        transform: translateX(-50%) translateY(-10px);
+      }
+      60% {
+        transform: translateX(-50%) translateY(-5px);
+      }
+    }
+
+    .scroll-indicator svg {
+      width: 30px;
+      height: 30px;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Feel the Physics</h1>
+      <p class="tagline">Drag anything. Watch it dance with gravity. Experience reality in your UI.</p>
+      
+      <div class="hero-cards">
+        <div id="hero-card-1" class="hero-card">
+          <h3>⚡ Lightning Fast</h3>
+          <p>Optimized Verlet physics running at smooth 60 FPS with minimal CPU usage.</p>
+          <div class="stats">
+            <div class="stat">
+              <div class="stat-value">60</div>
+              <div class="stat-label">FPS</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value">&lt;5%</div>
+              <div class="stat-label">CPU</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="hero-card-2" class="hero-card">
+          <h3>🎨 Fully Customizable</h3>
+          <p>Fine-tune every aspect: gravity, friction, air resistance, tear mechanics and more.</p>
+          <div class="stats">
+            <div class="stat">
+              <div class="stat-value">15+</div>
+              <div class="stat-label">Options</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value">0</div>
+              <div class="stat-label">Dependencies</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="hero-card-3" class="hero-card">
+          <h3>🎯 Production Ready</h3>
+          <p>TypeScript, ESM/UMD builds, full type definitions. Built for real projects.</p>
+          <div class="stats">
+            <div class="stat">
+              <div class="stat-value">100%</div>
+              <div class="stat-label">TypeScript</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value">MIT</div>
+              <div class="stat-label">License</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="scroll-indicator">
+        <svg fill="white" viewBox="0 0 24 24">
+          <path d="M7 10l5 5 5-5z"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dashboard Section -->
+  <section class="dashboard">
+    <div class="section-header">
+      <h2>Dashboard Analytics</h2>
+      <p>Watch your metrics come alive with physics-based interactions</p>
+    </div>
+
+    <div class="dashboard-grid">
+      <div id="dash-1" class="dashboard-card">
+        <h3>📊 Revenue Metrics</h3>
+        <div class="metric">
+          <span class="metric-label">Monthly Revenue</span>
+          <span class="metric-value">$45.2K</span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Growth Rate</span>
+          <span class="metric-value">+23%</span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Active Users</span>
+          <span class="metric-value">12.4K</span>
+        </div>
+      </div>
+
+      <div id="dash-2" class="dashboard-card">
+        <h3>👥 User Engagement</h3>
+        <div class="metric">
+          <span class="metric-label">Daily Active</span>
+          <span class="metric-value">8.2K</span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Avg. Session</span>
+          <span class="metric-value">12m 34s</span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Bounce Rate</span>
+          <span class="metric-value">18.5%</span>
+        </div>
+      </div>
+
+      <div id="dash-3" class="dashboard-card">
+        <h3>⚡ Performance</h3>
+        <div class="metric">
+          <span class="metric-label">Page Load</span>
+          <span class="metric-value">1.2s</span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Uptime</span>
+          <span class="metric-value">99.9%</span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Response Time</span>
+          <span class="metric-value">145ms</span>
+        </div>
+      </div>
+
+      <div id="dash-4" class="dashboard-card">
+        <h3>💳 Transactions</h3>
+        <div class="metric">
+          <span class="metric-label">Today</span>
+          <span class="metric-value">342</span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">This Week</span>
+          <span class="metric-value">2.8K</span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Success Rate</span>
+          <span class="metric-value">98.2%</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Notes Section -->
+  <section class="notes-section">
+    <div class="section-header" style="color: #4a1d96;">
+      <h2>Sticky Notes Board</h2>
+      <p style="color: #6b21a8;">Drag notes around - they tear if you pull too hard!</p>
+    </div>
+
+    <div class="sticky-notes">
+      <div id="note-1" class="sticky-note">
+        <h4>🎯 Project Goals</h4>
+        <p>Launch MVP by Q2, focus on user experience and performance optimization. Target 10K users in first month.</p>
+      </div>
+
+      <div id="note-2" class="sticky-note blue">
+        <h4>💡 Feature Ideas</h4>
+        <p>- Dark mode support<br>- Mobile app version<br>- API integrations<br>- Team collaboration</p>
+      </div>
+
+      <div id="note-3" class="sticky-note pink">
+        <h4>🐛 Bug Fixes</h4>
+        <p>Fix navigation menu on mobile, optimize image loading, resolve Safari compatibility issues.</p>
+      </div>
+
+      <div id="note-4" class="sticky-note green">
+        <h4>✅ Completed Tasks</h4>
+        <p>✓ Design system created<br>✓ Database migrated<br>✓ Tests written<br>✓ Documentation updated</p>
+      </div>
+
+      <div id="note-5" class="sticky-note">
+        <h4>📅 This Week</h4>
+        <p>Monday: Team standup<br>Wed: Client meeting<br>Friday: Sprint review<br>Weekend: Rest!</p>
+      </div>
+
+      <div id="note-6" class="sticky-note blue">
+        <h4>🚀 Launch Checklist</h4>
+        <p>□ Final QA testing<br>□ Marketing materials<br>□ Server scaling<br>□ Support team ready</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cards Section -->
+  <section class="cards-section">
+    <div class="section-header" style="color: #0c4a6e;">
+      <h2>Product Showcase</h2>
+      <p style="color: #075985;">Interactive product cards with realistic physics</p>
+    </div>
+
+    <div class="cards-grid">
+      <div id="product-1" class="product-card">
+        <div class="card-image">💻</div>
+        <div class="card-content">
+          <h3>Pro Plan</h3>
+          <div class="price">$29/mo</div>
+          <p>Perfect for growing teams and professional developers.</p>
+          <ul class="features">
+            <li>Unlimited projects</li>
+            <li>Advanced analytics</li>
+            <li>24/7 support</li>
+            <li>Custom integrations</li>
+          </ul>
+          <button class="btn">Get Started</button>
+        </div>
+      </div>
+
+      <div id="product-2" class="product-card">
+        <div class="card-image">🚀</div>
+        <div class="card-content">
+          <h3>Enterprise</h3>
+          <div class="price">$99/mo</div>
+          <p>For large organizations with advanced needs.</p>
+          <ul class="features">
+            <li>Everything in Pro</li>
+            <li>Dedicated account manager</li>
+            <li>SLA guarantee</li>
+            <li>Custom training</li>
+          </ul>
+          <button class="btn">Contact Sales</button>
+        </div>
+      </div>
+
+      <div id="product-3" class="product-card">
+        <div class="card-image">✨</div>
+        <div class="card-content">
+          <h3>Starter</h3>
+          <div class="price">Free</div>
+          <p>Get started with our free forever plan.</p>
+          <ul class="features">
+            <li>5 projects</li>
+            <li>Basic analytics</li>
+            <li>Community support</li>
+            <li>Open source</li>
+          </ul>
+          <button class="btn">Try Now</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Receipts Section -->
+  <section class="receipts-section">
+    <div class="section-header" style="color: #831843;">
+      <h2>Digital Receipts</h2>
+      <p style="color: #9f1239;">Transform boring receipts into interactive experiences</p>
+    </div>
+
+    <div class="receipts-grid">
+      <div id="receipt-1" class="receipt">
+        <h3>☕ Coffee & Co.</h3>
+        <div class="date">Feb 24, 2026 - 09:30 AM</div>
+        <div class="receipt-item">
+          <span>Cappuccino</span>
+          <span>$4.50</span>
+        </div>
+        <div class="receipt-item">
+          <span>Croissant</span>
+          <span>$3.00</span>
+        </div>
+        <div class="receipt-item">
+          <span>Tip</span>
+          <span>$1.50</span>
+        </div>
+        <div class="divider"></div>
+        <div class="total">
+          <span>Total</span>
+          <span>$9.00</span>
+        </div>
+        <div class="footer">Thank you! Come again 🙏</div>
+      </div>
+
+      <div id="receipt-2" class="receipt">
+        <h3>🛒 SuperMart</h3>
+        <div class="date">Feb 24, 2026 - 14:15 PM</div>
+        <div class="receipt-item">
+          <span>Organic Apples (2kg)</span>
+          <span>$5.99</span>
+        </div>
+        <div class="receipt-item">
+          <span>Whole Grain Bread</span>
+          <span>$2.49</span>
+        </div>
+        <div class="receipt-item">
+          <span>Fresh Milk (1L)</span>
+          <span>$3.99</span>
+        </div>
+        <div class="receipt-item">
+          <span>Tax</span>
+          <span>$0.93</span>
+        </div>
+        <div class="divider"></div>
+        <div class="total">
+          <span>Total</span>
+          <span>$13.40</span>
+        </div>
+        <div class="footer">Saved $2.45 with loyalty card! 🎉</div>
+      </div>
+
+      <div id="receipt-3" class="receipt">
+        <h3>🍕 Pizza Palace</h3>
+        <div class="date">Feb 24, 2026 - 19:45 PM</div>
+        <div class="receipt-item">
+          <span>Margherita Large</span>
+          <span>$12.00</span>
+        </div>
+        <div class="receipt-item">
+          <span>Garlic Bread</span>
+          <span>$4.50</span>
+        </div>
+        <div class="receipt-item">
+          <span>Coca Cola (2L)</span>
+          <span>$2.99</span>
+        </div>
+        <div class="receipt-item">
+          <span>Delivery Fee</span>
+          <span>$2.50</span>
+        </div>
+        <div class="divider"></div>
+        <div class="total">
+          <span>Total</span>
+          <span>$21.99</span>
+        </div>
+        <div class="footer">Delivered in 28 minutes! ⚡</div>
+      </div>
+
+      <div id="receipt-4" class="receipt">
+        <h3>🏪 Tech Store</h3>
+        <div class="date">Feb 24, 2026 - 16:20 PM</div>
+        <div class="receipt-item">
+          <span>Wireless Mouse</span>
+          <span>$29.99</span>
+        </div>
+        <div class="receipt-item">
+          <span>USB-C Cable</span>
+          <span>$12.99</span>
+        </div>
+        <div class="receipt-item">
+          <span>Phone Case</span>
+          <span>$19.99</span>
+        </div>
+        <div class="receipt-item">
+          <span>Tax</span>
+          <span>$5.03</span>
+        </div>
+        <div class="divider"></div>
+        <div class="total">
+          <span>Total</span>
+          <span>$68.00</span>
+        </div>
+        <div class="footer">1 Year Warranty Included 🛡️</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Controls Panel -->
+  <button class="controls-toggle" onclick="toggleControls()">⚙️ Controls</button>
+  
+  <div class="controls-panel hidden" id="controlsPanel">
+    <h3>⚙️ Physics Controls</h3>
+    
+    <div class="control-group">
+      <label>
+        <span>Gravity</span>
+        <span class="value" id="gravityValue">0.18</span>
+      </label>
+      <input type="range" id="gravity" min="0" max="0.5" step="0.01" value="0.18">
+    </div>
+
+    <div class="control-group">
+      <label>
+        <span>Stiffness</span>
+        <span class="value" id="stiffnessValue">0.85</span>
+      </label>
+      <input type="range" id="stiffness" min="0.1" max="1" step="0.05" value="0.85">
+    </div>
+
+    <div class="control-group">
+      <label>
+        <span>Damping</span>
+        <span class="value" id="dampingValue">0.92</span>
+      </label>
+      <input type="range" id="damping" min="0.5" max="0.99" step="0.01" value="0.92">
+    </div>
+
+    <div class="control-buttons">
+      <button id="toggleWind">🌪️ Toggle Wind</button>
+      <button id="toggleHover" class="active">✨ Hover Effect: ON</button>
+      <button id="repairTears">🔧 Repair All Tears</button>
+      <button id="resetAll">🔄 Reset All</button>
+    </div>
+
+    <div class="stats">
+      <div>
+        <span>FPS:</span>
+        <strong id="fps">60</strong>
+      </div>
+      <div>
+        <span>Active Papers:</span>
+        <strong id="paperCount">0</strong>
+      </div>
+      <div>
+        <span>Torn Constraints:</span>
+        <strong id="tornCount">0</strong>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { SoftPaper } from '../dist/esm/index.js';
+
+    // Store all paper instances
+    const papers = [];
+
+    // Default configuration
+    const defaultConfig = {
+      grid: { cols: 10, rows: 20 },
+      gravity: 0.18,
+      stiffness: 0.85,
+      damping: 0.92,
+      airResistance: 0.995,
+      friction: 0.98,
+      iterations: 6,
+      tearThreshold: 2.5,
+      interactive: true,
+      shadow: true,
+      wind: false,
+      windStrength: 0.05,
+      windFrequency: 0.02,
+      boundaries: true,
+      hoverEffect: true,
+      hoverRadius: 80,
+      dragRadius: 50
+    };
+
+    // Initialize all elements with soft paper effect
+    function initAll() {
+      // Hero cards
+      ['hero-card-1', 'hero-card-2', 'hero-card-3'].forEach(id => {
+        papers.push(new SoftPaper(`#${id}`, defaultConfig));
+      });
+
+      // Dashboard cards
+      ['dash-1', 'dash-2', 'dash-3', 'dash-4'].forEach(id => {
+        papers.push(new SoftPaper(`#${id}`, defaultConfig));
+      });
+
+      // Sticky notes (with higher tear threshold)
+      ['note-1', 'note-2', 'note-3', 'note-4', 'note-5', 'note-6'].forEach(id => {
+        papers.push(new SoftPaper(`#${id}`, { ...defaultConfig, tearThreshold: 2.0 }));
+      });
+
+      // Product cards
+      ['product-1', 'product-2', 'product-3'].forEach(id => {
+        papers.push(new SoftPaper(`#${id}`, defaultConfig));
+      });
+
+      // Receipts
+      ['receipt-1', 'receipt-2', 'receipt-3', 'receipt-4'].forEach(id => {
+        papers.push(new SoftPaper(`#${id}`, defaultConfig));
+      });
+
+      updateStats();
+    }
+
+    // Initialize on load
+    setTimeout(initAll, 100);
+
+    // Controls
+    const gravitySlider = document.getElementById('gravity');
+    const stiffnessSlider = document.getElementById('stiffness');
+    const dampingSlider = document.getElementById('damping');
+    const gravityValue = document.getElementById('gravityValue');
+    const stiffnessValue = document.getElementById('stiffnessValue');
+    const dampingValue = document.getElementById('dampingValue');
+    const toggleWindBtn = document.getElementById('toggleWind');
+    const toggleHoverBtn = document.getElementById('toggleHover');
+    const repairTearsBtn = document.getElementById('repairTears');
+    const resetAllBtn = document.getElementById('resetAll');
+    const fpsDisplay = document.getElementById('fps');
+    const paperCountDisplay = document.getElementById('paperCount');
+    const tornCountDisplay = document.getElementById('tornCount');
+
+    let windEnabled = false;
+    let hoverEnabled = true;
+
+    // Gravity control
+    gravitySlider.addEventListener('input', (e) => {
+      const value = parseFloat(e.target.value);
+      gravityValue.textContent = value.toFixed(2);
+      papers.forEach(paper => paper.updateConfig({ gravity: value }));
+    });
+
+    // Stiffness control
+    stiffnessSlider.addEventListener('input', (e) => {
+      const value = parseFloat(e.target.value);
+      stiffnessValue.textContent = value.toFixed(2);
+      papers.forEach(paper => paper.updateConfig({ stiffness: value }));
+    });
+
+    // Damping control
+    dampingSlider.addEventListener('input', (e) => {
+      const value = parseFloat(e.target.value);
+      dampingValue.textContent = value.toFixed(2);
+      papers.forEach(paper => paper.updateConfig({ damping: value }));
+    });
+
+    // Toggle wind
+    toggleWindBtn.addEventListener('click', () => {
+      windEnabled = !windEnabled;
+      toggleWindBtn.classList.toggle('active', windEnabled);
+      toggleWindBtn.textContent = windEnabled ? '🌪️ Wind: ON' : '🌪️ Wind: OFF';
+      papers.forEach(paper => paper.setWind(windEnabled));
+    });
+
+    // Toggle hover
+    toggleHoverBtn.addEventListener('click', () => {
+      hoverEnabled = !hoverEnabled;
+      toggleHoverBtn.classList.toggle('active', hoverEnabled);
+      toggleHoverBtn.textContent = hoverEnabled ? '✨ Hover Effect: ON' : '✨ Hover Effect: OFF';
+      papers.forEach(paper => paper.updateConfig({ hoverEffect: hoverEnabled }));
+    });
+
+    // Repair tears
+    repairTearsBtn.addEventListener('click', () => {
+      papers.forEach(paper => paper.repairTears());
+      updateStats();
+    });
+
+    // Reset all
+    resetAllBtn.addEventListener('click', () => {
+      papers.forEach(paper => paper.destroy());
+      papers.length = 0;
+      setTimeout(initAll, 100);
+      
+      gravitySlider.value = defaultConfig.gravity;
+      stiffnessSlider.value = defaultConfig.stiffness;
+      dampingSlider.value = defaultConfig.damping;
+      gravityValue.textContent = defaultConfig.gravity.toFixed(2);
+      stiffnessValue.textContent = defaultConfig.stiffness.toFixed(2);
+      dampingValue.textContent = defaultConfig.damping.toFixed(2);
+      
+      windEnabled = false;
+      toggleWindBtn.classList.remove('active');
+      toggleWindBtn.textContent = '🌪️ Wind: OFF';
+      
+      hoverEnabled = true;
+      toggleHoverBtn.classList.add('active');
+      toggleHoverBtn.textContent = '✨ Hover Effect: ON';
+    });
+
+    // FPS counter
+    let lastTime = performance.now();
+    let frames = 0;
+    let fps = 60;
+
+    function updateFPS() {
+      frames++;
+      const currentTime = performance.now();
+      
+      if (currentTime >= lastTime + 1000) {
+        fps = Math.round((frames * 1000) / (currentTime - lastTime));
+        fpsDisplay.textContent = fps;
+        frames = 0;
+        lastTime = currentTime;
+      }
+      
+      requestAnimationFrame(updateFPS);
+    }
+    updateFPS();
+
+    // Update stats
+    function updateStats() {
+      paperCountDisplay.textContent = papers.length;
+      let totalTorn = 0;
+      papers.forEach(paper => {
+        totalTorn += paper.getTornCount();
+      });
+      tornCountDisplay.textContent = totalTorn;
+    }
+
+    setInterval(updateStats, 1000);
+
+    // Toggle controls panel
+    window.toggleControls = function() {
+      const panel = document.getElementById('controlsPanel');
+      panel.classList.toggle('hidden');
+    };
+
+    // Smooth scroll for scroll indicator
+    document.querySelector('.scroll-indicator').addEventListener('click', () => {
+      document.querySelector('.dashboard').scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>

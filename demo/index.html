@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soft Paper UI - Ultra-Smooth Cloth Physics for Web</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --accent: #ec4899;
+      --success: #10b981;
+      --text-dark: #0f172a;
+      --text-medium: #475569;
+      --text-light: #94a3b8;
+      --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text-dark);
+      line-height: 1.6;
+      overflow-x: hidden;
+      background: #fafafa;
+    }
+
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(20px);
+      padding: 1.2rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .logo {
+      font-size: 1.6rem;
+      font-weight: 900;
+      background: var(--bg-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-medium);
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    .nav-cta {
+      background: var(--primary);
+      color: white;
+      padding: 0.7rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .nav-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      position: relative;
+      overflow: hidden;
+      padding: 120px 5% 80px;
+    }
+
+    .hero-grid {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    @media (max-width: 968px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+    }
+
+    .hero-content h1 {
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 900;
+      color: white;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 4px 30px rgba(0,0,0,0.2);
+    }
+
+    .hero-content .tagline {
+      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+      color: rgba(255,255,255,0.95);
+      margin-bottom: 2.5rem;
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 968px) {
+      .hero-buttons {
+        justify-content: center;
+      }
+    }
+
+    .btn {
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 1.05rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+      border: none;
+    }
+
+    .btn-light {
+      background: white;
+      color: var(--primary);
+    }
+
+    .btn-light:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: white;
+      border: 2px solid white;
+    }
+
+    .btn-outline:hover {
+      background: white;
+      color: var(--primary);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 2.5rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 968px) {
+      .hero-stats {
+        justify-content: center;
+      }
+    }
+
+    .stat {
+      text-align: left;
+    }
+
+    .stat .number {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: white;
+      display: block;
+      line-height: 1;
+    }
+
+    .stat .label {
+      color: rgba(255,255,255,0.85);
+      font-size: 0.95rem;
+      margin-top: 0.3rem;
+    }
+
+    .hero-demo {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+    }
+
+    @media (max-width: 968px) {
+      .hero-demo {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+        margin: 0 auto;
+      }
+    }
+
+    .demo-card {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 25px 80px rgba(0,0,0,0.3);
+      cursor: grab;
+      transition: box-shadow 0.3s;
+    }
+
+    .demo-card:hover {
+      box-shadow: 0 30px 100px rgba(0,0,0,0.4);
+    }
+
+    .demo-card:active {
+      cursor: grabbing;
+    }
+
+    .demo-card .icon {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+    }
+
+    .demo-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 8px;
+      color: var(--text-dark);
+    }
+
+    .demo-card p {
+      color: var(--text-medium);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* Features Section */
+    .features {
+      padding: 100px 5%;
+      background: white;
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 70px;
+    }
+
+    .section-header .label {
+      color: var(--primary);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-size: 0.9rem;
+      margin-bottom: 15px;
+    }
+
+    .section-header h2 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 900;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+
+    .section-header p {
+      font-size: 1.25rem;
+      color: var(--text-medium);
+      line-height: 1.7;
+    }
+
+    .features-grid {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+    }
+
+    .feature {
+      background: #fafafa;
+      padding: 40px;
+      border-radius: 20px;
+      transition: transform 0.3s, box-shadow 0.3s;
+      border: 1px solid #f0f0f0;
+    }
+
+    .feature:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+    }
+
+    .feature .icon {
+      width: 70px;
+      height: 70px;
+      background: var(--bg-gradient);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      margin-bottom: 25px;
+    }
+
+    .feature h3 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      font-weight: 700;
+    }
+
+    .feature p {
+      color: var(--text-medium);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    /* Interactive Showcase */
+    .showcase {
+      padding: 100px 5%;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #667eea 100%);
+    }
+
+    .showcase-content {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .showcase-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .showcase-header h2 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 900;
+      color: white;
+      margin-bottom: 20px;
+    }
+
+    .showcase-header p {
+      font-size: 1.3rem;
+      color: rgba(255,255,255,0.95);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 35px;
+      position: relative;
+    }
+
+    /* Card wrapper allows controlled canvas overflow */
+    .card-wrapper {
+      position: relative;
+      overflow: visible;
+      z-index: 1;
+    }
+
+    .card-wrapper:hover {
+      z-index: 10;
+    }
+
+    .showcase-card {
+      background: white;
+      border-radius: 24px;
+      padding: 45px;
+      box-shadow: 0 30px 90px rgba(0,0,0,0.3);
+      position: relative;
+      transition: all 0.3s;
+      overflow: visible;
+    }
+
+    /* Canvas physically extends beyond card boundaries */
+    .showcase-card canvas {
+      position: absolute !important;
+      top: -30px !important;
+      left: -30px !important;
+      width: calc(100% + 60px) !important;
+      height: calc(100% + 60px) !important;
+      pointer-events: auto;
+    }
+
+    .showcase-card:hover {
+      box-shadow: 0 35px 110px rgba(0,0,0,0.4);
+    }
+
+    .showcase-card .badge {
+      display: inline-block;
+      background: var(--bg-gradient);
+      color: white;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 20px;
+    }
+
+    .showcase-card h3 {
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+      font-weight: 800;
+    }
+
+    .showcase-card p {
+      color: var(--text-medium);
+      line-height: 1.8;
+      font-size: 1.05rem;
+      margin-bottom: 20px;
+    }
+
+    .showcase-card ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .showcase-card li {
+      padding: 8px 0;
+      color: var(--text-medium);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .showcase-card li::before {
+      content: '✓';
+      color: var(--success);
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    /* Code Section */
+    .code-section {
+      padding: 100px 5%;
+      background: var(--text-dark);
+      color: white;
+    }
+
+    .code-content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .code-header h2 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 900;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .code-header p {
+      font-size: 1.3rem;
+      color: rgba(255,255,255,0.85);
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 60px;
+    }
+
+    .code-examples {
+      display: grid;
+      gap: 40px;
+    }
+
+    .code-example {
+      background: rgba(255,255,255,0.05);
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .code-example-header {
+      background: rgba(255,255,255,0.08);
+      padding: 20px 30px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .code-example-header h3 {
+      font-size: 1.3rem;
+      margin-bottom: 8px;
+    }
+
+    .code-example-header p {
+      color: rgba(255,255,255,0.7);
+      font-size: 0.95rem;
+    }
+
+    .code-block {
+      padding: 30px;
+      overflow-x: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 0.95rem;
+      line-height: 1.8;
+    }
+
+    .code-block .comment { color: #64748b; }
+    .code-block .keyword { color: #f472b6; }
+    .code-block .string { color: #34d399; }
+    .code-block .function { color: #fbbf24; }
+    .code-block .number { color: #818cf8; }
+
+    /* CTA Section */
+    .cta {
+      padding: 120px 5%;
+      background: white;
+    }
+
+    .cta-content {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .cta h2 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 900;
+      margin-bottom: 25px;
+    }
+
+    .cta p {
+      font-size: 1.3rem;
+      color: var(--text-medium);
+      margin-bottom: 40px;
+      line-height: 1.7;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--text-dark);
+      color: rgba(255,255,255,0.7);
+      padding: 60px 5% 40px;
+    }
+
+    .footer-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 60px;
+      margin-bottom: 40px;
+    }
+
+    @media (max-width: 968px) {
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+    }
+
+    .footer-brand h3 {
+      font-size: 1.8rem;
+      color: white;
+      margin-bottom: 15px;
+    }
+
+    .footer-brand p {
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .footer-links h4 {
+      color: white;
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+    }
+
+    .footer-links ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .footer-links li {
+      margin-bottom: 12px;
+    }
+
+    .footer-links a {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-links a:hover {
+      color: white;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 40px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* Scroll indicator */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      color: white;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-10px); }
+    }
+
+    .scroll-indicator span {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="logo">🧻 Soft Paper UI</div>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#showcase">Demo</a>
+      <a href="#code">Code</a>
+      <a href="#" class="nav-cta">Get Started →</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-grid">
+      <div class="hero-content">
+        <h1>Natural Cloth Physics<br>Grab, Tear, Interact</h1>
+        <p class="tagline">
+          Realistic tear-able cloth simulation inspired by classic Canvas demos. Natural gravity, direct mouse grab, 
+          tear mechanics. Click to interact, drag to move. No WebGL. Pure 2D canvas.
+        </p>
+        <div class="hero-buttons">
+          <a href="#" class="btn btn-light">npm install soft-paper-ui</a>
+          <a href="#showcase" class="btn btn-outline">Try Live Demo ↓</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="number">0</span>
+            <span class="label">Dependencies</span>
+          </div>
+          <div class="stat">
+            <span class="number">&lt;5%</span>
+            <span class="label">CPU Usage</span>
+          </div>
+          <div class="stat">
+            <span class="number">x³</span>
+            <span class="label">Cubic Influence</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-demo">
+        <div class="demo-card" id="hero-card-1">
+          <div class="icon">🧵</div>
+          <h3>Tear-able!</h3>
+          <p>Constraints break when stretched too far</p>
+        </div>
+        <div class="demo-card" id="hero-card-2">
+          <div class="icon">✨</div>
+          <h3>Direct Grab</h3>
+          <p>Mouse pins particle directly for responsive feel</p>
+        </div>
+        <div class="demo-card" id="hero-card-3">
+          <div class="icon">⬇️</div>
+          <h3>Natural Gravity</h3>
+          <p>Realistic downward pull (0.4 force)</p>
+        </div>
+        <div class="demo-card" id="hero-card-4">
+          <div class="icon">🎯</div>
+          <h3>Clean Physics</h3>
+          <p>Simple Verlet integration, pure cloth feel</p>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-indicator">
+      <span>Scroll to Explore</span>
+      <span style="font-size: 1.5rem;">↓</span>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features" id="features">
+    <div class="section-header">
+      <div class="label">FEATURES</div>
+      <h2>Classic Cloth Simulation,<br>Modern Implementation</h2>
+      <p>
+        Inspired by the iconic tear-able cloth demos. Natural gravity, direct mouse interaction, 
+        and tear mechanics. Simple physics that just works.
+      </p>
+    </div>
+    <div class="features-grid">
+      <div class="feature">
+        <div class="icon">�</div>
+        <h3>Punch Ripple Effect</h3>
+        <p>Click anywhere to punch! Ripples spread in 150px radius like hitting cloth in water. Flows naturally with gravity.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">💨</div>
+        <h3>0.98 Stiffness</h3>
+        <p>High stiffness like real cloth. Maintains shape integrity, tears when stretched too far (3.5x).</p>
+      </div>
+      <div class="feature">
+        <div class="icon">⬇️</div>
+        <h3>0.4 Gravity</h3>
+        <p>Natural gravity makes cloth fall and hang realistically. Strong enough to see immediate effect.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">🧵</div>
+        <h3>Tear Mechanics</h3>
+        <p>Constraints break at 3.5x stretch. Pull hard enough and the cloth tears realistically!</p>
+      </div>
+      <div class="feature">
+        <div class="icon">🎯</div>
+        <h3>High Stiffness</h3>
+        <p>0.98 stiffness keeps cloth shape intact. Pull too hard and it tears instead of stretching infinitely.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">🎨</div>
+        <h3>CSS Texture Capture</h3>
+        <p>Captures any HTML element with full CSS support. Gradients, borders, shadows - everything.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">📦</div>
+        <h3>Zero Dependencies</h3>
+        <p>Pure TypeScript. No Three.js, no Matter.js, no bloat. Just smooth physics.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">🔄</div>
+        <h3>Revert Animation</h3>
+        <p>Smoothly animate back to original position with bounce, elastic, or smooth easing.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">💫</div>
+        <h3>0.9999 Air Resistance</h3>
+        <p>Maximum air resistance creates that premium smooth glide feeling. Every movement is butter.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Showcase -->
+  <section class="showcase" id="showcase">
+    <div class="showcase-content">
+      <div class="showcase-header">
+        <h2>Ultra-Fluid Cross-Card Flow</h2>
+        <p>
+          Watch waves flow beyond card edges! Each card has its own cloth physics that visually extend into neighbors. Silk-like, buttery smooth motion.
+        </p>
+      </div>
+      <div class="showcase-grid">
+        <div class="card-wrapper">
+          <div class="showcase-card" id="showcase-1">
+          <span class="badge">Product Card</span>
+          <h3>Premium Feature</h3>
+          <p>Click anywhere and watch ripples flow beyond the card! Ultra-flexible cloth extends into neighboring spaces.</p>
+          <ul>
+            <li>Canvas overflow enabled</li>
+            <li>0.25 ultra-flex stiffness</li>
+            <li>Silk-like motion</li>
+            <li>Cross-card propagation</li>
+          </ul>
+        </div>
+        </div>
+
+        <div class="card-wrapper">
+          <div class="showcase-card" id="showcase-2">
+          <span class="badge">Pricing Card</span>
+          <h3>$49/month</h3>
+          <p>Drag anywhere - the cloth flows smoothly with maximum air resistance for that butter-smooth feel.</p>
+          <ul>
+            <li>15x25 particle grid</li>
+            <li>0.9995 air resistance</li>
+            <li>16 iterations for stability</li>
+            <li>Extends beyond bounds</li>
+          </ul>
+        </div>
+        </div>
+
+        <div class="card-wrapper">
+          <div class="showcase-card" id="showcase-3">
+          <span class="badge">Team Card</span>
+          <h3>Meet Sarah</h3>
+          <p>Each card is independent but visually connected. Low stiffness creates ultra-flexible fabric behavior.</p>
+          <ul>
+            <li>Separate physics per card</li>
+            <li>Visual overflow effect</li>
+            <li>High damping smoothness</li>
+            <li>Neighbor influence</li>
+          </ul>
+        </div>
+        </div>
+
+        <div class="card-wrapper">
+          <div class="showcase-card" id="showcase-4">
+          <span class="badge">Dashboard Widget</span>
+          <h3>Analytics</h3>
+          <p>Canvases extend 30px beyond borders. Waves appear to flow seamlessly between cards for realistic feel.</p>
+          <ul>
+            <li>30px border extension</li>
+            <li>Tear threshold: 8.0x</li>
+            <li>0.02 light gravity</li>
+            <li>Real cross-card flow</li>
+          </ul>
+        </div>
+        </div>
+
+        <div class="card-wrapper">
+          <div class="showcase-card" id="showcase-5">
+          <span class="badge">Notification</span>
+          <h3>Achievement Unlocked! 🎉</h3>
+          <p>You discovered the overflow technique! Separate canvases with extended boundaries create connected flow.</p>
+          <ul>
+            <li>Multi-canvas architecture</li>
+            <li>Position absolute overflow</li>
+            <li>Z-index layering</li>
+            <li>Seamless illusion</li>
+          </ul>
+        </div>
+        </div>
+
+        <div class="card-wrapper">
+          <div class="showcase-card" id="showcase-6">
+          <span class="badge">Call To Action</span>
+          <h3>Get Started</h3>
+          <p>This demo uses optimized settings: low stiffness, high air resistance, and extended canvas boundaries.</p>
+          <ul>
+            <li>Optimized physics preset</li>
+            <li>Canvas overflow CSS</li>
+            <li>TypeScript + ESM ready</li>
+            <li>Copy & paste setup</li>
+          </ul>
+        </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Code Section -->
+  <section class="code-section" id="code">
+    <div class="code-content">
+      <div class="code-header">
+        <h2>Simple to Use</h2>
+        <p>One line of code gets you ultra-smooth physics. Customize everything or use sensible defaults.</p>
+      </div>
+      <div class="code-examples">
+        <div class="code-example">
+          <div class="code-example-header">
+            <h3>Basic Usage</h3>
+            <p>Water-like cloth with punch effect - instant magic!</p>
+          </div>
+          <div class="code-block">
+<span class="keyword">import</span> { <span class="function">SoftPaper</span> } <span class="keyword">from</span> <span class="string">'soft-paper-ui'</span>;
+
+<span class="comment">// That's it! Click to punch and watch it flow</span>
+<span class="keyword">const</span> paper = <span class="keyword">new</span> <span class="function">SoftPaper</span>(<span class="string">'#my-element'</span>);
+<span class="comment">// Ripples spread on click, flows with gravity!</span>
+          </div>
+        </div>
+
+        <div class="code-example">
+          <div class="code-example-header">
+            <h3>Custom Physics</h3>
+            <p>Fine-tune the water-like cloth flow</p>
+          </div>
+          <div class="code-block">
+<span class="keyword">const</span> paper = <span class="keyword">new</span> <span class="function">SoftPaper</span>(<span class="string">'#element'</span>, {
+  <span class="comment">// Natural cloth physics (like CodePen classic)</span>
+  gravity: <span class="number">0.4</span>,         <span class="comment">// Natural gravity</span>
+  stiffness: <span class="number">0.98</span>,      <span class="comment">// High stiffness</span>
+  damping: <span class="number">0.99</span>,        <span class="comment">// Natural damping</span>
+  tearThreshold: <span class="number">3.5</span>,    <span class="comment">// Tears at 3.5x</span>
+  iterations: <span class="number">8</span>,        <span class="comment">// Balanced solve</span>
+  
+  <span class="comment">// Interaction</span>
+  dragRadius: <span class="number">30</span>,       <span class="comment">// Direct grab</span>
+  interactive: <span class="keyword">true</span>,   <span class="comment">// Click & drag</span>
+  boundaries: <span class="keyword">false</span>    <span class="comment">// No walls</span>
+});
+
+<span class="comment">// Click creates automatic punch ripple!</span>
+<span class="comment">// Ripples spread 150px with quadratic falloff</span>
+          </div>
+        </div>
+
+        <div class="code-example">
+          <div class="code-example-header">
+            <h3>Advanced Features</h3>
+            <p>Revert animations, ripples, waves, and more</p>
+          </div>
+          <div class="code-block">
+<span class="comment">// Revert to original position</span>
+<span class="keyword">await</span> paper.<span class="function">revertToOriginal</span>(<span class="number">2000</span>, <span class="string">'elastic'</span>);
+
+<span class="comment">// Create ripple effect</span>
+paper.<span class="function">createRipple</span>(x, y, strength, radius);
+
+<span class="comment">// Wave animation</span>
+paper.<span class="function">createWave</span>(<span class="string">'horizontal'</span>, <span class="number">8</span>, <span class="number">0.5</span>);
+
+<span class="comment">// Shake effect</span>
+paper.<span class="function">shake</span>(<span class="number">5</span>, <span class="number">600</span>);
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta">
+    <div class="cta-content">
+      <h2>Ready to Make Your UI Flow?</h2>
+      <p>
+        Join developers creating the next generation of interactive experiences. 
+        Install in seconds, amaze in minutes.
+      </p>
+      <div class="cta-buttons">
+        <a href="#" class="btn btn-primary">npm install soft-paper-ui</a>
+        <a href="#" class="btn btn-secondary">View on GitHub →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-brand">
+        <h3>🧻 Soft Paper UI</h3>
+        <p>
+          Ultra-smooth cloth physics for the modern web. 
+          Zero dependencies, maximum performance, infinite possibilities.
+        </p>
+      </div>
+      <div class="footer-links">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="#">Features</a></li>
+          <li><a href="#">Documentation</a></li>
+          <li><a href="#">Examples</a></li>
+          <li><a href="#">Pricing</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Developers</h4>
+        <ul>
+          <li><a href="#">API Reference</a></li>
+          <li><a href="#">GitHub</a></li>
+          <li><a href="#">NPM Package</a></li>
+          <li><a href="#">Changelog</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Support</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Soft Paper UI. Made with ❤️ for smooth interactions.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { SoftPaper } from '../dist/esm/index.js';
+
+    // Hero cards - ultra-smooth
+    ['hero-card-1', 'hero-card-2', 'hero-card-3', 'hero-card-4'].forEach(id => {
+      new SoftPaper(`#${id}`, {
+        interactive: true,
+        shadow: true,
+        hoverEffect: true
+      });
+    });
+
+    // Showcase cards - separate canvases with overflow for realistic cross-card effects
+    ['showcase-1', 'showcase-2', 'showcase-3', 'showcase-4', 'showcase-5', 'showcase-6'].forEach(id => {
+      new SoftPaper(`#${id}`, {
+        interactive: true,
+        shadow: true,
+        hoverEffect: true,
+        grid: { cols: 15, rows: 25 },      // More particles for smoother flow
+        gravity: 0.02,                      // Very light gravity for floating feel
+        stiffness: 0.25,                    // Low stiffness = super flexible cloth
+        damping: 0.995,                     // High damping = butter smooth
+        iterations: 16,                     // More iterations for stability
+        airResistance: 0.9995,              // Maximum smoothness in air
+        friction: 0.99,                     // Low friction for easy flow
+        dragRadius: 50,                     // Larger drag area
+        tearThreshold: 8.0                  // Hard to tear for continuous flow
+      });
+    });
+    console.log('🌊 Separate canvases with overflow - waves extend beyond card boundaries!');
+    console.log('💨 Ultra-flexible physics: 0.25 stiffness, 0.9995 air resistance');
+    console.log('🎯 Real flow: Low gravity + high damping = silk-like motion');
+    console.log('📐 15x25 particle grid for smooth wave propagation');
+  </script>
+</body>
+</html>
