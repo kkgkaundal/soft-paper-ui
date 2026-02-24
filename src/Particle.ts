@@ -1,4 +1,4 @@
-import { Vec2 } from './Vec2';
+import { Vec2 } from './Vec2.js';
 
 /**
  * Particle class representing a point in the cloth simulation

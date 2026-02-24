@@ -1,4 +1,4 @@
-import { Particle } from './Particle';
+import { Particle } from './Particle.js';
 
 /**
  * Constraint class representing a distance constraint between two particles

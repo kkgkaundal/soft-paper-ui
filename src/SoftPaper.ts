@@ -1,7 +1,7 @@
-import { Particle } from './Particle';
-import { Constraint } from './Constraint';
-import { Vec2 } from './Vec2';
-import { SoftPaperOptions, GridConfig, PhysicsConfig } from './types';
+import { Particle } from './Particle.js';
+import { Constraint } from './Constraint.js';
+import { Vec2 } from './Vec2.js';
+import { SoftPaperOptions, GridConfig, PhysicsConfig } from './types.js';
 
 /**
  * Main SoftPaper class - creates a soft, draggable, gravity-affected paper effect
@@ -508,5 +508,19 @@ export class SoftPaper {
         c.stiffness = config.stiffness;
       }
     }
+  }
+
+  /**
+   * Toggle wind effect on/off
+   */
+  public setWind(enabled: boolean): void {
+    this.wind = enabled;
+  }
+
+  /**
+   * Get wind state
+   */
+  public isWindEnabled(): boolean {
+    return this.wind;
   }
 }

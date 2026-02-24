@@ -353,8 +353,7 @@
     toggleWindBtn.addEventListener('click', () => {
       windEnabled = !windEnabled;
       toggleWindBtn.textContent = windEnabled ? 'Disable Wind' : 'Enable Wind';
-      // Note: Wind toggle would need to be implemented in the SoftPaper class
-      // For now, this is just a placeholder
+      papers.forEach(paper => paper.setWind(windEnabled));
     });
 
     resetBtn.addEventListener('click', () => {
